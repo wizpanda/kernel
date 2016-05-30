@@ -2,7 +2,7 @@ class KernelGrailsPlugin {
 
     // The plugin version
     String version = "0.1"
-    String groupId = "com.wizpanda.plugins"
+    String groupId = "com.wiz-panda.plugins"
     // The version or versions of Grails the plugin is designed for
     String grailsVersion = "2.5 > *"
     // Resources that are excluded from plugin packaging
