@@ -6,8 +6,6 @@ import grails.plugin.asyncmail.AsynchronousMailService
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
 
-import javax.annotation.PostConstruct
-
 /**
  *
  * @author Shashank Agrawal
@@ -15,20 +13,17 @@ import javax.annotation.PostConstruct
  */
 class MailUtils {
 
-    private static AsynchronousMailService mailService
-    private static PageRenderer groovyPageRenderer
-
     private static Log log = LogFactory.getLog(this)
 
-    @PostConstruct
-    void initialize() {
-        groovyPageRenderer = KernelUtils.getBean("groovyPageRenderer")
-        mailService = KernelUtils.getBean("mailService")
-
-        log.debug "Initialized"
+    static private PageRenderer getGroovyPageRenderer() {
+        return KernelUtils.getBean("groovyPageRenderer")
     }
 
-    AsynchronousMailMessage sendMail(String email, String subject, Map<String, Object> template, Map args) {
+    static private AsynchronousMailService getMailService() {
+        return KernelUtils.getBean("asynchronousMailService")
+    }
+
+    static AsynchronousMailMessage sendMail(String email, String subject, Map<String, Object> template, Map args) {
         return sendMail([email], subject, template, args)
     }
 
@@ -54,10 +49,13 @@ class MailUtils {
         String htmlContent = args.htmlContent
 
         if (template) {
-            htmlContent = groovyPageRenderer.render(template)
+            htmlContent = getGroovyPageRenderer().render(template)
         }
 
-        AsynchronousMailMessage messageInstance = mailService.sendMail {
+        AsynchronousMailMessage messageInstance = getMailService().sendMail {
+            if (args.attachments) {
+                multipart(true)
+            }
             if (args.from) {
                 from(args.from)
             }
@@ -70,8 +68,6 @@ class MailUtils {
             html(htmlContent)
 
             if (args.attachments) {
-                multipart(true)
-
                 args.attachments.each { File fileInstance ->
                     attach(fileInstance)
                 }
