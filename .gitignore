@@ -1,6 +1,10 @@
 .classpath
 .project
 *.iml
+*.zip
+*.zip.sha1
+plugin.xml
 .idea/
 target/
 test/
+web-app/WEB-INF

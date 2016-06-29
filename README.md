@@ -24,3 +24,16 @@ mavenRepo "http://dl.bintray.com/wizpanda/grails-plugins"
 ```groovy
 compile "com.wizpanda.plugins:kernel:0.0.1"
 ```
+
+## Releasing new version
+
+1. Change the version in the `KernalGrailsPlugin.groovy`
+2. Run `grails maven-deploy`
+
+You should have following in your `~/.grails/settings.groovy`
+
+```groovy
+grails.project.repos.default = "wizpandaRepo"
+grails.project.repos.wizpandaRepo.username = "my-username"
+grails.project.repos.wizpandaRepo.password = "my-password"
+```
