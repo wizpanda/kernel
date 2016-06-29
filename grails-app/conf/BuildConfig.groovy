@@ -19,7 +19,7 @@ grails.project.fork = [
 grails.project.dependency.resolver = "maven" // or ivy
 
 grails.project.dependency.distribution = {
-    remoteRepository(id: "wizpanda-repo", url: "https://api.bintray.com/maven/wizpanda/grails-plugins/kernel/;publish=1")
+    remoteRepository(id: "wizpandaRepo", url: "https://api.bintray.com/maven/wizpanda/grails-plugins/kernel/;publish=1")
 }
 
 grails.project.dependency.resolution = {
