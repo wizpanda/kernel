@@ -1,8 +1,6 @@
 package com.wizpanda.utils
 
 import grails.gsp.PageRenderer
-import grails.plugin.asyncmail.AsynchronousMailMessage
-import grails.plugin.asyncmail.AsynchronousMailService
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
 
@@ -19,11 +17,13 @@ class MailUtils {
         return KernelUtils.getBean("groovyPageRenderer")
     }
 
-    static private AsynchronousMailService getMailService() {
+    // def should be AsynchronousMailService
+    static private def getMailService() {
         return KernelUtils.getBean("asynchronousMailService")
     }
 
-    static AsynchronousMailMessage sendMail(String email, String subject, Map<String, Object> template, Map args) {
+    // def should be AsynchronousMailMessage
+    static def sendMail(String email, String subject, Map<String, Object> template, Map args) {
         return sendMail([email], subject, template, args)
     }
 
@@ -42,7 +42,8 @@ class MailUtils {
      *
      * @return Instance of AsynchronousMailMessage domain recently created
      */
-    static AsynchronousMailMessage sendMail(List<String> emails, String emailSubject, Map template, Map args) {
+    // def should be AsynchronousMailMessage
+    static def sendMail(List<String> emails, String emailSubject, Map template, Map args) {
         log.debug "Sending email to $emails subject [$emailSubject] args $args"
 
         args = args ?: [:]
@@ -52,7 +53,7 @@ class MailUtils {
             htmlContent = getGroovyPageRenderer().render(template)
         }
 
-        AsynchronousMailMessage messageInstance = getMailService().sendMail {
+        def messageInstance = getMailService().sendMail {
             if (args.attachments) {
                 multipart(true)
             }
