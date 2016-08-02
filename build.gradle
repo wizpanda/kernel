@@ -61,20 +61,17 @@ dependencies {
     testRuntime "net.sourceforge.htmlunit:htmlunit:2.18"
 }
 grailsPublish {
-    // TODO: Provide values here
-    user = 'user'
-    key = 'key'
-    githubSlug = 'foo/bar'
+    githubSlug = "wizpanda/kernel"
+    userOrg = "wizpanda"
+    repo = "grails-plugins"
     license {
-        name = 'Apache-2.0'
+        name = "Apache-2.0"
     }
-    title = "My Plugin"
-    desc = "Full plugin description"
-    developers = [johndoe:"John Doe"]
-    portalUser = ""
-    portalPassword = ""    
+    title = "Kernel"
+    desc = "A Grails plugin to provide some core functionality and utility classes"
+    developers = [sagrawal14: "Shashank Agrawal"]
 }
 
-assets {
+/*assets {
     packagePlugin = true
-}
+}*/
