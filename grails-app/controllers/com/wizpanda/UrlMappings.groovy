@@ -1,4 +1,4 @@
-package kernel
+package com.wizpanda
 
 class UrlMappings {
 
