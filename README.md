@@ -1,4 +1,4 @@
-# Kernel (v1.0.0)
+# Kernel (v1.0.1)
 
 A simple Grails plugin which provide some core functionality and utility classes for a Grails application.
 
@@ -8,6 +8,10 @@ Grails Version | Supported
 --------- | ---------
 2         |  Only v0.0.1
 3         |  >= v1.0.0
+
+## Change Log
+
+See [Releases](https://github.com/wizpanda/kernel/releases) for the changes.
 
 ## Installation
 
