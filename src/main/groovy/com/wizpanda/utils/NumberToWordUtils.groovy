@@ -1,6 +1,6 @@
 package com.wizpanda.utils
 
-class NumberToWord {
+class NumberToWordUtils {
     static List specialNames = [ "", " Thousand", " Million", " Billion", " Trillion", " Quadrillion", "Quintillion"];
 
     static List tensNames = [
