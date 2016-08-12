@@ -56,6 +56,6 @@ class NumberToWord {
             invoiceAmount /= 1000;
         }
 
-        return prefix + " " + current
+        return prefix + " " + current + "Only"
     }
 }
