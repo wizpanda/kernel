@@ -30,6 +30,7 @@ ext {
 repositories {
     mavenLocal()
     maven { url "https://repo.grails.org/grails/core" }
+    maven { url "https://mvnrepository.com/artifact/joda-time/joda-time" }
 }
 
 dependencyManagement {
@@ -50,6 +51,7 @@ dependencies {
     compile "org.grails.plugins:cache"
     compile "org.grails.plugins:scaffolding"
     compile "org.hashids:hashids:1.0.1"
+    compile "joda-time:joda-time:2.9.4"
     console "org.grails:grails-console"
     profile "org.grails.profiles:web-plugin"
     provided "org.grails:grails-plugin-services"
