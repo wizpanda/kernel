@@ -1,5 +1,6 @@
 package com.wizpanda
 
+import com.wizpanda.converts.FormattedStringValueConverter
 import grails.plugins.*
 
 class KernelGrailsPlugin extends Plugin {
@@ -25,4 +26,10 @@ class KernelGrailsPlugin extends Plugin {
     Map issueManagement = [system: "GITHUB", url: "https://github.com/wizpanda/kernel/issues"]
 
     Map scm = [ url: "https://github.com/wizpanda/kernel" ]
+
+    Closure doWithSpring() {
+        { ->
+            formattedStringConverter(FormattedStringValueConverter)
+        }
+    }
 }
