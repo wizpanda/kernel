@@ -112,6 +112,7 @@ class JodaUtils {
                 return true     // break the loop
             } catch (IllegalArgumentException e) {
                 firstException = firstException ?: e
+                return false   // continue the loop
             }
         }
 
