@@ -82,6 +82,22 @@ class MailUtils {
             subject(emailSubject)
             html(htmlContent)
 
+            if (args.cc) {
+                if (args.cc instanceof String) {
+                    cc(args.cc)
+                } else if (args.cc instanceof List) {
+                    cc(args.cc.toArray())
+                }
+            }
+
+            if (args.bcc) {
+                if (args.bcc instanceof String) {
+                    bcc(args.bcc)
+                } else if (args.bcc instanceof List) {
+                    bcc(args.bcc.toArray())
+                }
+            }
+
             if (args.attachments) {
                 args.attachments.each { File fileInstance ->
                     attach(fileInstance)
