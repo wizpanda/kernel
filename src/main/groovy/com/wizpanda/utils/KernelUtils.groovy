@@ -12,4 +12,8 @@ class KernelUtils {
     static Object getBean(String serviceName) {
         Holders.getApplicationContext()[serviceName]
     }
+
+    static String getAppName() {
+        Holders.getGrailsApplication().metadata["info.app.name"].capitalize()
+    }
 }
