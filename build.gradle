@@ -19,7 +19,7 @@ group "com.wizpanda.plugins"
 apply plugin:"idea"
 apply plugin:"org.grails.grails-plugin"
 apply plugin:"org.grails.grails-plugin-publish"
-//apply plugin:"org.grails.grails-gsp"
+apply plugin:"org.grails.grails-gsp"
 //apply plugin:"asset-pipeline"
 
 ext {
@@ -52,6 +52,7 @@ dependencies {
     compile "org.grails.plugins:scaffolding"
     compile "org.hashids:hashids:1.0.1"
     compile "joda-time:joda-time:2.9.4"
+    compile "org.grails:grails-plugin-gsp:3.2.1"
     console "org.grails:grails-console"
     profile "org.grails.profiles:web-plugin"
     provided "org.grails:grails-plugin-services"
