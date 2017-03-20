@@ -7,6 +7,8 @@ import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
 import org.grails.datastore.gorm.GormEntity
 
+import javax.servlet.http.HttpServletRequest
+
 /**
  *
  * @author Shashank Agrawal
@@ -133,7 +135,6 @@ class MailUtils {
      */
     static void sendValidationFailedEmail(List<GormEntity> gormInstances, Map model) {
         log.debug "Sending exception email"
-        String appName = KernelUtils.getAppName()
 
         model = model ?: [:]
         model.gormInstances = gormInstances
@@ -157,11 +158,24 @@ class MailUtils {
      *
      * @since 1.0.5
      */
-    static void sendExceptionEmail(List<Throwable> exceptions, Map model) {
+    static private void _sendExceptionEmail(List<Throwable> exceptions, Map model) {
         log.debug "Sending exception email"
 
         model = model ?: [:]
         model.exceptions = exceptions
+
+        if (model.request && (model.request instanceof HttpServletRequest)) {
+            HttpServletRequest _request = model.request
+
+            String requestURL = _request.forwardURI
+            if (_request.queryString) {
+                requestURL += "?" + _request.queryString
+            }
+
+            model.requestURL = requestURL
+            model.angularURL = _request.getHeader("angular-url")
+        }
+
         Map templateModel = [
                 template: "/email-templates/exception",
                 model: model,
@@ -172,7 +186,21 @@ class MailUtils {
         sendMail(developersEmail, "Internal Server Error", templateModel, [immediate: true, appendAppInfo: true])
     }
 
+    static void sendExceptionEmail(List<Throwable> exceptions, Map model) {
+        try {
+            _sendExceptionEmail(exceptions, model)
+        } catch (Exception e) {
+            // Do not repeatedly call this method to avoid StackOverflow.
+            log.error "Couldn't send email.", e
+        }
+    }
+
     static void sendExceptionEmail(Throwable exception, Map model) {
-        sendExceptionEmail([exception], model)
+        try {
+            _sendExceptionEmail([exception], model)
+        } catch (Exception e) {
+            // Do not repeatedly call this method to avoid StackOverflow.
+            log.error "Couldn't send email.", e
+        }
     }
 }
