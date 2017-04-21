@@ -1,10 +1,12 @@
 package com.wizpanda.utils
 
 import grails.gsp.PageRenderer
+import grails.transaction.Transactional
 import grails.util.Environment
 import grails.util.Holders
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
+import org.grails.datastore.gorm.GormEnhancer
 import org.grails.datastore.gorm.GormEntity
 
 import javax.servlet.http.HttpServletRequest
@@ -36,6 +38,13 @@ class MailUtils {
         return sendMail([email], subject, template, args)
     }
 
+    static def sendMail(List<String> emails, String emailSubject, Map templateData, Map args) {
+        // Use any of the available domain class to create a new transaction
+        Holders.getGrailsApplication().getDomainClasses()[0].clazz.withNewTransaction {
+            _sendMail(emails, emailSubject, templateData, args)
+        }
+    }
+
     /**
      * A helper method to send email via Grails asynchronous mail plugin. This plugin provide simpler wrapper to send
      * a Grails view as the body. The Grails mail plugin also provide the option to send a Grails template as email
@@ -52,7 +61,7 @@ class MailUtils {
      * @return Instance of AsynchronousMailMessage domain recently created
      */
     // def should be AsynchronousMailMessage
-    static def sendMail(List<String> emails, String emailSubject, Map templateData, Map args) {
+    static def _sendMail(List<String> emails, String emailSubject, Map templateData, Map args) {
         log.debug "Sending email to $emails subject [$emailSubject] args $args"
 
         args = args ?: [:]
@@ -72,7 +81,7 @@ class MailUtils {
 
             if (args.developerEmail) {
                 templateData.model.eventCode = eventCode
-                setRequestRelatedModel(RequestUtils.currentRequest, templateData.model)
+                setRequestRelatedModel(templateData.model.request ?: RequestUtils.currentRequest, templateData.model)
             }
 
             htmlContent = getGroovyPageRenderer().render(templateData)
@@ -174,8 +183,8 @@ class MailUtils {
             requestURL += "?" + request.queryString
         }
 
-        model.request = request
         model.requestURL = requestURL
+        model.currentRequest = request
         model.headers = RequestUtils.getHeaders(request)
         model.frontendURL = request.getHeader("angular-url") || request.getHeader("frontend-url")
     }

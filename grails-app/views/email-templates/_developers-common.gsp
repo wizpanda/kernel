@@ -4,10 +4,10 @@
     <g:if test="${userInstance}">
         <li><strong>User:</strong> ${userInstance}</li>
     </g:if>
-    <g:if test="${request}">
-        <li><strong>Host:</strong> ${request.protocol} ${request.scheme} ${request.remoteHost} ${request.serverPort}</li>
-        <li><strong>Request URL:</strong> ${request.method} ${requestURL}</li>
-        <li><strong>Client IP:</strong> ${request.getRemoteAddr()}</li>
+    <g:if test="${currentRequest}">
+        <li><strong>Host:</strong> ${currentRequest.protocol} ${currentRequest.scheme} ${currentRequest.remoteHost} ${currentRequest.serverPort}</li>
+        <li><strong>Request URL:</strong> ${currentRequest.method} ${requestURL}</li>
+        <li><strong>Client IP:</strong> ${currentRequest.getRemoteAddr()}</li>
         <li>
             <strong>Headers:</strong>
             <small>
@@ -22,8 +22,8 @@
             <strong>Session Variables:</strong>
             <small>
                 <ul>
-                    <g:each in="${request.session.getAttributeNames()}" var="name">
-                        <li><strong>${name}:</strong> ${request.session.getAttribute(name)}</li>
+                    <g:each in="${currentRequest.session.getAttributeNames()}" var="name">
+                        <li><strong>${name}:</strong> ${currentRequest.session.getAttribute(name)}</li>
                     </g:each>
                 </ul>
             </small>
