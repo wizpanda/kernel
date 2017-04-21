@@ -9,13 +9,9 @@
         </div>
         <br>
         <div>
-            Domain Validation Failed.
+            Developer notification generated.
             <g:render template="/email-templates/developers-common" plugin="kernel" />
         </div>
-        <br>
-        <g:each in="${gormInstances }" var="instance">
-            <kernel:renderErrors bean="${instance }" />
-        </g:each>
         <br>
         From,<br>
         ${appName } Server

@@ -9,11 +9,8 @@
         </div>
         <br>
         <div>
-            Internal server error occurred
-            <g:if test="${userInstance }">for ${userInstance }</g:if>
-            <g:if test="${requestURL }">while processing request at <strong>${requestURL }</strong></g:if>
-            <g:if test="${angularURL }">at Angular app URL <strong>${angularURL }</strong></g:if>
-            <g:if test="${codeExecutionAt }">while "${codeExecutionAt }"</g:if>
+            Internal server error occurred.
+            <g:render template="/email-templates/developers-common" plugin="kernel" />
         </div>
         <br>
         <g:each in="${exceptions }" var="exception">

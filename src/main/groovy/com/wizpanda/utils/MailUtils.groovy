@@ -46,27 +46,36 @@ class MailUtils {
      *
      * @param emails List of email addresses to send email to (to need to call ".toArray")
      * @param emailSubject Subject of the email
-     * @param templateModel The template options as described in http://docs.grails.org/2.5.4/ref/Tags/render.html
+     * @param templateData The template options as described in http://docs.grails.org/3.2.8/ref/Tags/render.html
      * @param args Additional data to pass to "sendMail" closure
      *
      * @return Instance of AsynchronousMailMessage domain recently created
      */
     // def should be AsynchronousMailMessage
-    static def sendMail(List<String> emails, String emailSubject, Map templateModel, Map args) {
+    static def sendMail(List<String> emails, String emailSubject, Map templateData, Map args) {
         log.debug "Sending email to $emails subject [$emailSubject] args $args"
 
         args = args ?: [:]
-        String htmlContent = args.html
-
+        String htmlContent = args.html, eventCode
         String appName = KernelUtils.getAppName()
-        if (args.appendAppInfo) {
-            emailSubject = "[$appName][${Environment.current.name}] $emailSubject"
+
+        if (args.developerEmail) {
+            eventCode = RandomUtils.randomUniqueCode(10)
+            log.debug "Email event code: $eventCode"
+
+            emailSubject = "[$appName][${Environment.current.name}] $emailSubject "
         }
 
-        if (templateModel) {
-            templateModel.model = templateModel.model ?: [:]
-            templateModel.model.appName = appName
-            htmlContent = getGroovyPageRenderer().render(templateModel)
+        if (templateData) {
+            templateData.model = templateData.model ?: [:]
+            templateData.model.appName = appName
+
+            if (args.developerEmail) {
+                templateData.model.eventCode = eventCode
+                setRequestRelatedModel(RequestUtils.currentRequest, templateData.model)
+            }
+
+            htmlContent = getGroovyPageRenderer().render(templateData)
         }
 
         def messageInstance = getMailService().sendMail {
@@ -116,11 +125,18 @@ class MailUtils {
         return messageInstance
     }
 
-    static void sendDevelopersEmail(String subject, Map<String, Object> template, Map args) {
+    static void sendDevelopersEmail(String subject, Map<String, Object> model, Map args = null) {
+        args = args ?: [:]
         args.immediate = true
-        args.appendAppInfo = true
+        args.developerEmail = true
 
-        sendMail(developersEmail, subject, template, args)
+        Map templateData = [
+                template: "/email-templates/developers",
+                model: model,
+                plugin: "kernel"
+        ]
+
+        sendMail(developersEmail, subject, templateData, args)
     }
 
     static void sendValidationFailedEmail(GormEntity gormInstance, Map templateModel) {
@@ -138,13 +154,30 @@ class MailUtils {
 
         model = model ?: [:]
         model.gormInstances = gormInstances
+        
         Map templateModel = [
                 template: "/email-templates/validation-failed",
                 model: model,
                 plugin: "kernel"
         ]
 
-        sendMail(developersEmail, "Domain validation failed", templateModel, [immediate: true, appendAppInfo: true])
+        sendMail(developersEmail, "Domain validation failed", templateModel, [immediate: true, developerEmail: true])
+    }
+
+    static private void setRequestRelatedModel(HttpServletRequest request, Map model) {
+        if (!model || !request) {
+            return
+        }
+
+        String requestURL = request.forwardURI
+        if (request.queryString) {
+            requestURL += "?" + request.queryString
+        }
+
+        model.request = request
+        model.requestURL = requestURL
+        model.headers = RequestUtils.getHeaders(request)
+        model.frontendURL = request.getHeader("angular-url") || request.getHeader("frontend-url")
     }
 
     /**
@@ -164,18 +197,6 @@ class MailUtils {
         model = model ?: [:]
         model.exceptions = exceptions
 
-        if (model.request && (model.request instanceof HttpServletRequest)) {
-            HttpServletRequest _request = model.request
-
-            String requestURL = _request.forwardURI
-            if (_request.queryString) {
-                requestURL += "?" + _request.queryString
-            }
-
-            model.requestURL = requestURL
-            model.angularURL = _request.getHeader("angular-url")
-        }
-
         Map templateModel = [
                 template: "/email-templates/exception",
                 model: model,
@@ -183,7 +204,7 @@ class MailUtils {
         ]
 
         String developersEmail = Holders.getFlatConfig()["app.developers.email"]
-        sendMail(developersEmail, "Internal Server Error", templateModel, [immediate: true, appendAppInfo: true])
+        sendMail(developersEmail, "Internal Server Error", templateModel, [immediate: true, developerEmail: true])
     }
 
     static void sendExceptionEmail(List<Throwable> exceptions, Map model) {
