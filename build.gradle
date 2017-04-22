@@ -9,7 +9,7 @@ buildscript {
     }
 }
 
-version "1.0.5-3"
+version "1.0.5-5"
 group "com.wizpanda.plugins"
 
 //apply plugin:"eclipse"
@@ -71,7 +71,7 @@ grailsPublish {
     }
     title = "Kernel"
     desc = "A Grails plugin to provide some core functionality and utility classes"
-    developers = [sagrawal14: "Shashank Agrawal"]
+    developers = [sagrawal31: "Shashank Agrawal"]
 }
 
 /*assets {
