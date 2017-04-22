@@ -9,7 +9,7 @@ buildscript {
     }
 }
 
-version "1.0.5-4"
+version "1.0.5-5"
 group "com.wizpanda.plugins"
 
 //apply plugin:"eclipse"
