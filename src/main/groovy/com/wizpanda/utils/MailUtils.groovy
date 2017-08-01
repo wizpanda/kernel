@@ -186,7 +186,7 @@ class MailUtils {
         model.requestURL = requestURL
         model.currentRequest = request
         model.headers = RequestUtils.getHeaders(request)
-        model.frontendURL = request.getHeader("angular-url") || request.getHeader("frontend-url")
+        model.frontendURL = request.getHeader("angular-url") ?: request.getHeader("frontend-url")
     }
 
     /**
