@@ -10,6 +10,10 @@ class KernelGrailsPlugin extends Plugin {
 
     def profiles = ['web']
 
+    def pluginExcludes = [
+            '**/com/wizpanda/UrlMappings*/**'
+    ]
+
     String title = "Kernel Grails Plugin" // Headline display name of the plugin
     String author = "Shashank Agrawal"
     String authorEmail = ""
