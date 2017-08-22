@@ -2,7 +2,7 @@
 grails:
     profile: web-plugin
     codegen:
-        defaultPackage: kernel
+        defaultPackage: com.wizpanda
     spring:
         transactionManagement:
             proxies: false
