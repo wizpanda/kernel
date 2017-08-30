@@ -1,4 +1,4 @@
-# Kernel (v1.0.4)
+# Kernel (v2.0.0)
 
 A simple Grails plugin which provide some core functionality and utility classes for a Grails application.
 
@@ -8,6 +8,7 @@ Grails Version | Supported
 --------- | ---------
 2         |  Only v0.0.1
 3         |  >= v1.0.0
+3.3.x     |  >= v2.0.0
 
 ## Change Log
 
