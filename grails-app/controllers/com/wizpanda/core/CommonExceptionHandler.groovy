@@ -4,16 +4,12 @@ import com.wizpanda.exception.InvalidDataException
 import com.wizpanda.exception.NotAcceptableException
 import com.wizpanda.exception.NotFoundException
 import com.wizpanda.exception.OperationFailedException
-import grails.converters.JSON
 import org.springframework.http.HttpStatus
 
-trait CommonExceptionHandler {
-
-    static responseFormats = ["json"]
+trait CommonExceptionHandler extends BaseController {
 
     private def respondException(Exception e, HttpStatus status) {
-        response.status = status.value()
-        render([errors: [[message: e.message, severity: "error", ttl: 10000]]] as JSON)
+        respond([errors: [[message: e.message, severity: "error", ttl: 10000]]], status)
     }
 
     def handleInvalidDataException(NotAcceptableException e) {

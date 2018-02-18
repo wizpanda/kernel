@@ -7,7 +7,7 @@ package com.wizpanda.exception
  */
 class NotFoundException extends Exception {
 
-    NotFoundException(String message) {
-        super(message)
+    NotFoundException(String message = "", Throwable cause = null) {
+        super(message, cause)
     }
 }

@@ -8,7 +8,7 @@ package com.wizpanda.exception
  */
 class InvalidDataException extends Exception {
 
-    InvalidDataException(String message = "") {
-        super(message)
+    InvalidDataException(String message = "", Throwable cause = null) {
+        super(message, cause)
     }
 }

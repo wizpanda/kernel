@@ -4,6 +4,7 @@ import grails.util.Holders
 import org.springframework.web.context.request.RequestContextHolder
 
 import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpSession
 
 /**
  * Created by shashank on 06/03/17.
@@ -24,6 +25,10 @@ class RequestUtils {
             // We might be in a thread where there is no request
             return null
         }
+    }
+
+    static HttpSession getSession(boolean create = false) {
+        getCurrentRequest()?.getSession(create)
     }
     
     static Map getHeaders(HttpServletRequest request) {
