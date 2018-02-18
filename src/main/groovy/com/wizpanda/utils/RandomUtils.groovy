@@ -14,7 +14,7 @@ class RandomUtils {
     /**
      * A helper method to generate random long numbers between defined minimum & maximum number.
      */
-    private static long generateRandomNumber(int min = MINIMUM_RANDOM, int max = MAXIMUM_RANDOM) {
+    static long generateRandomNumber(int min = MINIMUM_RANDOM, int max = MAXIMUM_RANDOM) {
         Random rand = new Random()
         return (min + rand.nextInt((max - min) + 1))
     }

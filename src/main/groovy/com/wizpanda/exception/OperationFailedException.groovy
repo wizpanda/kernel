@@ -7,7 +7,7 @@ package com.wizpanda.exception
  */
 class OperationFailedException extends Exception {
 
-    OperationFailedException(String message = "") {
-        super(message)
+    OperationFailedException(String message = "", Throwable cause = null) {
+        super(message, cause)
     }
 }
