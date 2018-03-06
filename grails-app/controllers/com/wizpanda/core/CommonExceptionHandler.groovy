@@ -4,6 +4,7 @@ import com.wizpanda.exception.InvalidDataException
 import com.wizpanda.exception.NotAcceptableException
 import com.wizpanda.exception.OperationFailedException
 import com.wizpanda.exception.ResourceNotFoundException
+import grails.validation.ValidationException
 import org.springframework.http.HttpStatus
 
 trait CommonExceptionHandler extends BaseController {
@@ -12,7 +13,7 @@ trait CommonExceptionHandler extends BaseController {
         respond([errors: [[message: e.message, severity: "error", ttl: 10000]]], status)
     }
 
-    def handleInvalidDataException(NotAcceptableException e) {
+    def handleNotAcceptableException(NotAcceptableException e) {
         respondException(e, HttpStatus.NOT_ACCEPTABLE)
     }
 
@@ -26,5 +27,9 @@ trait CommonExceptionHandler extends BaseController {
 
     def handleResourceNotFoundException(ResourceNotFoundException e) {
         respondException(e, HttpStatus.NOT_FOUND)
+    }
+
+    def handleValidtionException(ValidationException e) {
+        respondException(e, HttpStatus.UNPROCESSABLE_ENTITY)
     }
 }

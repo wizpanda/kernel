@@ -1,5 +1,6 @@
 package com.wizpanda.core
 
+import grails.converters.JSON
 import grails.gorm.PagedResultList
 import org.springframework.http.HttpStatus
 
@@ -14,8 +15,6 @@ trait BaseController {
 
     def respond(Map data, HttpStatus status) {
         response.status = (status ?: HttpStatus.OK).value()
-        respond(data)
-        // or you can respond as
-        //respond([status: status], data)
+        render(data as JSON)
     }
 }
