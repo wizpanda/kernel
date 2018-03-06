@@ -2,8 +2,8 @@ package com.wizpanda.core
 
 import com.wizpanda.exception.InvalidDataException
 import com.wizpanda.exception.NotAcceptableException
-import com.wizpanda.exception.NotFoundException
 import com.wizpanda.exception.OperationFailedException
+import com.wizpanda.exception.ResourceNotFoundException
 import org.springframework.http.HttpStatus
 
 trait CommonExceptionHandler extends BaseController {
@@ -24,7 +24,7 @@ trait CommonExceptionHandler extends BaseController {
         respondException(e, HttpStatus.NOT_ACCEPTABLE)
     }
 
-    def handleNotFoundException(NotFoundException e) {
+    def handleResourceNotFoundException(ResourceNotFoundException e) {
         respondException(e, HttpStatus.NOT_FOUND)
     }
 }

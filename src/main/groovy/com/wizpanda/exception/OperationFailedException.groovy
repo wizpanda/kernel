@@ -5,7 +5,7 @@ package com.wizpanda.exception
  * 
  * @author Shashank Agrawal
  */
-class OperationFailedException extends Exception {
+class OperationFailedException extends RuntimeException {
 
     OperationFailedException(String message = "", Throwable cause = null) {
         super(message, cause)

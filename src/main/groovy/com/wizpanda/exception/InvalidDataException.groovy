@@ -6,7 +6,7 @@ package com.wizpanda.exception
  * 
  * @author Shashank Agrawal
  */
-class InvalidDataException extends Exception {
+class InvalidDataException extends RuntimeException {
 
     InvalidDataException(String message = "", Throwable cause = null) {
         super(message, cause)
