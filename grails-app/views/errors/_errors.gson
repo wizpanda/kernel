@@ -16,6 +16,6 @@ json {
     errors(allErrors) { ObjectError error ->
         message messageSource.getMessage(error, locale)
         severity "warning"
-        ttl 10000
+        ttl(-1)
     }
 }
