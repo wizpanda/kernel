@@ -5,16 +5,18 @@ buildscript {
     }
     dependencies {
         classpath "org.grails:grails-gradle-plugin:$grailsVersion"
+        classpath "org.grails.plugins:views-gradle:1.2.7"
     }
 }
 
-version "2.0.3"
+version "2.0.4"
 group "com.wizpanda.plugins"
 
-apply plugin:"idea"
-apply plugin:"org.grails.grails-plugin"
-apply plugin:"org.grails.grails-plugin-publish"
-apply plugin:"org.grails.grails-gsp"
+apply plugin: "idea"
+apply plugin: "org.grails.grails-plugin"
+apply plugin: "org.grails.grails-plugin-publish"
+apply plugin: "org.grails.grails-gsp"
+apply plugin: "org.grails.plugins.views-json"
 
 repositories {
     mavenLocal()
@@ -42,6 +44,7 @@ dependencies {
 
     compile "org.hashids:hashids:1.0.1"
     compile "joda-time:joda-time:2.9.4"
+    provided "org.grails.plugins:views-json:1.2.7"
 
     profile "org.grails.profiles:web-plugin"
 
