@@ -1,9 +1,10 @@
 package com.wizpanda.exception
 
 // See CommonExceptionHandler.groovy for further usage
-class NotAcceptableException extends RuntimeException {
+class NotAcceptableException extends ErrorCodeAwareException {
 
-    NotAcceptableException(String message = "", Throwable cause = null) {
+    NotAcceptableException(Integer errorCode = null, String message = null, Throwable cause = null) {
         super(message, cause)
+        this.errorCode = errorCode
     }
 }

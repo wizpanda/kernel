@@ -1,6 +1,7 @@
 package com.wizpanda.utils
 
 import grails.util.Holders
+import org.grails.web.json.JSONObject
 import org.springframework.web.context.request.RequestContextHolder
 
 import javax.servlet.http.HttpServletRequest
@@ -51,8 +52,8 @@ class RequestUtils {
         return params.collect { key, value -> "$key=" + URLEncoder.encode(value?.toString(), "UTF-8") }.join("&")
     }
 
-    static Map maskSensitiveData(Map params) {
-        Map clonedParams = params.clone()
+    private static maskData(Map params) {
+        Map clonedParams = params
         Holders.getFlatConfig()["sensitive.keys"].each {
             if (clonedParams[it]) {
                 clonedParams[it] = "****"
@@ -61,4 +62,13 @@ class RequestUtils {
 
         clonedParams
     }
+
+    static Map maskSensitiveData(Map params) {
+        maskData(params)
+    }
+
+    static JSONObject maskSensitiveData(JSONObject params) {
+        maskData(KernelUtils.clone(params))
+    }
+
 }

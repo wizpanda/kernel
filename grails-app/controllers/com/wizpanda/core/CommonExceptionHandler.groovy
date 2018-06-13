@@ -1,5 +1,6 @@
 package com.wizpanda.core
 
+import com.wizpanda.exception.ErrorCodeAwareException
 import com.wizpanda.exception.InvalidDataException
 import com.wizpanda.exception.NotAcceptableException
 import com.wizpanda.exception.OperationFailedException
@@ -9,8 +10,8 @@ import org.springframework.http.HttpStatus
 
 trait CommonExceptionHandler extends BaseController {
 
-    private def respondException(Exception e, HttpStatus status) {
-        respond([errors: [[message: e.message, severity: "error", ttl: 10000]]], status)
+    private def respondException(ErrorCodeAwareException e, HttpStatus status) {
+        respond([errors: [[errorCode: e.errorCode, message: e.message, severity: "error", ttl: 10000]]], status)
     }
 
     def handleNotAcceptableException(NotAcceptableException e) {
@@ -30,6 +31,6 @@ trait CommonExceptionHandler extends BaseController {
     }
 
     def handleValidtionException(ValidationException e) {
-        respondException(e, HttpStatus.UNPROCESSABLE_ENTITY)
+        respond([errors: [[message: e.message, severity: "error", ttl: 10000]]], HttpStatus.UNPROCESSABLE_ENTITY)
     }
 }

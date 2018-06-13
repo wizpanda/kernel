@@ -6,9 +6,10 @@ package com.wizpanda.exception
  * 
  * @author Shashank Agrawal
  */
-class InvalidDataException extends RuntimeException {
+class InvalidDataException extends ErrorCodeAwareException {
 
-    InvalidDataException(String message = "", Throwable cause = null) {
+    InvalidDataException(Integer errorCode = null, String message = null, Throwable cause = null) {
         super(message, cause)
+        this.errorCode = errorCode
     }
 }

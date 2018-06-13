@@ -5,9 +5,10 @@ package com.wizpanda.exception
  * 
  * @author Shashank Agrawal
  */
-class ResourceNotFoundException extends RuntimeException {
+class ResourceNotFoundException extends ErrorCodeAwareException {
 
-    ResourceNotFoundException(String message = "", Throwable cause = null) {
+    ResourceNotFoundException(Integer errorCode = null, String message = null, Throwable cause = null) {
         super(message, cause)
+        this.errorCode = errorCode
     }
 }
