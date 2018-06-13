@@ -1,6 +1,7 @@
 package com.wizpanda.utils
 
 import grails.util.Holders
+import org.grails.web.json.JSONObject
 
 /**
  *
@@ -15,5 +16,9 @@ class KernelUtils {
 
     static String getAppName() {
         Holders.getGrailsApplication().metadata["info.app.name"].capitalize()
+    }
+
+    static JSONObject clone(JSONObject original) {
+        new JSONObject(original, original.names().toArray() as String[])
     }
 }
