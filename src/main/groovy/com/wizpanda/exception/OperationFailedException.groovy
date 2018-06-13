@@ -5,9 +5,10 @@ package com.wizpanda.exception
  * 
  * @author Shashank Agrawal
  */
-class OperationFailedException extends RuntimeException {
+class OperationFailedException extends ErrorCodeAwareException {
 
-    OperationFailedException(String message = "", Throwable cause = null) {
+    OperationFailedException(Integer errorCode = null, String message = null, Throwable cause = null) {
         super(message, cause)
+        this.errorCode = errorCode
     }
 }
