@@ -52,7 +52,8 @@ class DateRangeUtils {
         new DateRange([start: firstDayOfTheMonth, end: lastDayOfTheMonth])
     }
 
-    static DateRange getRange(def rawStartDate, def rawEndDate) {
+    // TODO check for JodaTime alternative.
+    /*static DateRange getRange(def rawStartDate, def rawEndDate) {
         if (!rawStartDate) {
             return null
         }
@@ -81,7 +82,7 @@ class DateRangeUtils {
         }
 
         new DateRange([start: startDate, end: endDate])
-    }
+    }*/
 }
 
 class DateRange {
