@@ -11,4 +11,8 @@ class ResourceNotFoundException extends ErrorCodeAwareException {
         super(message, cause)
         this.errorCode = errorCode
     }
+
+    ResourceNotFoundException(String message, Throwable cause = null) {
+        super(message, cause)
+    }
 }

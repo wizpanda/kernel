@@ -7,4 +7,8 @@ class NotAcceptableException extends ErrorCodeAwareException {
         super(message, cause)
         this.errorCode = errorCode
     }
+
+    NotAcceptableException(String message, Throwable cause = null) {
+        super(message, cause)
+    }
 }
