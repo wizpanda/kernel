@@ -15,17 +15,17 @@ class DomainUtils {
      * into all classes is now an Slf4j Logger instance and not an instance of the Commons Logging Log class
      */
     static boolean save(GormEntity domainInstance, boolean flush, Log log) {
-        _save(domainInstance, flush, log)
+        save(domainInstance, [flush: flush], log)
     }
 
     /**
      * This is to support Grails version 3.2.0 or higher since the SLF4J is now default logger in Grails 3.2.0
      */
     static boolean save(GormEntity domainInstance, boolean flush, Logger log) {
-        _save(domainInstance, flush, log)
+        save(domainInstance, [flush: flush], log)
     }
 
-    static private _save(GormEntity domainInstance, boolean flush, def log) {
+    static save(GormEntity domainInstance, Map params, def log) {
         if (!domainInstance) {
             return false
         }
@@ -37,7 +37,7 @@ class DomainUtils {
             return false
         }
 
-        domainInstance.save(flush: flush)
+        domainInstance.save(params)
 
         return true
     }

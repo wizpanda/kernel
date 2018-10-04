@@ -8,9 +8,10 @@ trait BaseController {
 
     static responseFormats = ["json"]
 
-    void respondListData(PagedResultList instanceList) {
-        response.setHeader("total-count", instanceList.totalCount.toString())
-        respond(instanceList)
+    def respond(PagedResultList instanceList, Map result = [:]) {
+        result.items = instanceList
+        result.totalItems = instanceList.getTotalCount()
+        respond(result)
     }
 
     def respond(Map data, HttpStatus status) {
