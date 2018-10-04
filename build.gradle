@@ -21,7 +21,6 @@ apply plugin: "org.grails.plugins.views-json"
 repositories {
     mavenLocal()
     maven { url "https://repo.grails.org/grails/core" }
-    maven { url "https://mvnrepository.com/artifact/joda-time/joda-time" }
 }
 
 dependencyManagement {
@@ -43,7 +42,6 @@ dependencies {
     compile "org.grails.plugins:scaffolding"
 
     compile "org.hashids:hashids:1.0.1"
-    compile "joda-time:joda-time:2.9.4"
     provided "org.grails.plugins:views-json:1.2.7"
 
     profile "org.grails.profiles:web-plugin"
