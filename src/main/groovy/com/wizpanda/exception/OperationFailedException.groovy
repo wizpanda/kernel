@@ -11,4 +11,8 @@ class OperationFailedException extends ErrorCodeAwareException {
         super(message, cause)
         this.errorCode = errorCode
     }
+
+    OperationFailedException(String message, Throwable cause = null) {
+        super(message, cause)
+    }
 }

@@ -12,4 +12,8 @@ class InvalidDataException extends ErrorCodeAwareException {
         super(message, cause)
         this.errorCode = errorCode
     }
+
+    InvalidDataException(String message, Throwable cause = null) {
+        super(message, cause)
+    }
 }
