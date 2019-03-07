@@ -18,4 +18,12 @@ trait BaseController {
         response.status = (status ?: HttpStatus.OK).value()
         render(data as JSON)
     }
+
+    def respondOk() {
+        render(status: HttpStatus.OK)
+    }
+
+    def reject(Map data) {
+        respond(data, HttpStatus.UNPROCESSABLE_ENTITY)
+    }
 }
