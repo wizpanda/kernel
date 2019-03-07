@@ -18,6 +18,10 @@ trait CommonExceptionHandler extends BaseController {
             errorResponse.putAll(e.additionalData)
         }
 
+        // This is for backward compatibility
+        //noinspection GroovyAssignabilityCheck
+        errorResponse.put("errors", [[errorCode: e.errorCode, message: e.message, severity: "error", ttl: 10000]])
+
         respond(errorResponse, status)
     }
 
@@ -48,6 +52,10 @@ trait CommonExceptionHandler extends BaseController {
             errorResponse.field = fieldError.getField()
             errorResponse.rejectedValue = fieldError.getRejectedValue()
         }
+
+        // This is for backward compatibility
+        //noinspection GroovyAssignabilityCheck
+        errorResponse.put("errors", [[message: e.message, severity: "error", ttl: 10000]])
 
         respond(errorResponse, HttpStatus.UNPROCESSABLE_ENTITY)
     }
