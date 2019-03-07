@@ -7,11 +7,18 @@ import com.wizpanda.exception.OperationFailedException
 import com.wizpanda.exception.ResourceNotFoundException
 import grails.validation.ValidationException
 import org.springframework.http.HttpStatus
+import org.springframework.validation.FieldError
+import org.springframework.validation.ObjectError
 
 trait CommonExceptionHandler extends BaseController {
 
-    private def respondException(ErrorCodeAwareException e, HttpStatus status) {
-        respond([errors: [[errorCode: e.errorCode, message: e.message, severity: "error", ttl: 10000]]], status)
+    def respondException(ErrorCodeAwareException e, HttpStatus status) {
+        Map errorResponse = [code: e.errorCode, message: e.message]
+        if (e.additionalData) {
+            errorResponse.putAll(e.additionalData)
+        }
+
+        respond(errorResponse, status)
     }
 
     def handleNotAcceptableException(NotAcceptableException e) {
@@ -31,6 +38,17 @@ trait CommonExceptionHandler extends BaseController {
     }
 
     def handleValidtionException(ValidationException e) {
-        respond([errors: [[message: e.message, severity: "error", ttl: 10000]]], HttpStatus.UNPROCESSABLE_ENTITY)
+        Map errorResponse = [type: "validation-error", message: e.message]
+
+        ObjectError fieldError = e.errors.getAllErrors()[0]
+        errorResponse.code = fieldError.getCode()
+        errorResponse.objectName = fieldError.getObjectName()
+
+        if (fieldError instanceof FieldError) {
+            errorResponse.field = fieldError.getField()
+            errorResponse.rejectedValue = fieldError.getRejectedValue()
+        }
+
+        respond(errorResponse, HttpStatus.UNPROCESSABLE_ENTITY)
     }
 }
