@@ -15,6 +15,8 @@ import javax.servlet.http.HttpSession
  */
 class RequestUtils {
 
+    private static final List<String> IP_HEADERS = ["X-Real-IP", "Client-IP", "X-Forwarded-For", "Proxy-Client-IP", "rlnclientipaddr"]
+
     private RequestUtils() {
         // Hide default constructor as this is a utility class
     }
@@ -31,7 +33,7 @@ class RequestUtils {
     static HttpSession getSession(boolean create = false) {
         getCurrentRequest()?.getSession(create)
     }
-    
+
     static Map getHeaders(HttpServletRequest request) {
         return request.headerNames.toList().collectEntries {
             return [(it): request.getHeader(it)]
@@ -71,4 +73,20 @@ class RequestUtils {
         maskData(KernelUtils.clone(params))
     }
 
+    static getIPAddress(HttpServletRequest request = getCurrentRequest()) {
+        String unknown = "127.0.0.1"
+        if (!request) {
+            return unknown
+        }
+
+        String ipAddress = unknown
+
+        IP_HEADERS.each { header ->
+            if (!ipAddress || unknown.equalsIgnoreCase(ipAddress)) {
+                ipAddress = request.getHeader(header)
+            }
+        }
+
+        return ipAddress ?: request.remoteAddr
+    }
 }
