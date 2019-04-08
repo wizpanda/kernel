@@ -45,6 +45,20 @@ class MailUtils {
         }
     }
 
+    static String prependEnvironmentInSubject(String subject) {
+        if (Environment.current == Environment.PRODUCTION) {
+            return subject
+        }
+
+        "[${Environment.current.name}] $subject"
+    }
+
+    static String prependAppNameInSubject(String subject) {
+        String appName = KernelUtils.getAppName()
+
+        "[$appName] $subject"
+    }
+
     /**
      * A helper method to send email via Grails asynchronous mail plugin. This plugin provide simpler wrapper to send
      * a Grails view as the body. The Grails mail plugin also provide the option to send a Grails template as email
@@ -68,11 +82,13 @@ class MailUtils {
         String htmlContent = args.html, eventCode
         String appName = KernelUtils.getAppName()
 
+        emailSubject = prependEnvironmentInSubject(emailSubject)
+
         if (args.developerEmail) {
             eventCode = RandomUtils.randomUniqueCode(10)
             log.debug "Email event code: $eventCode"
 
-            emailSubject = "[$appName][${Environment.current.name}] $emailSubject "
+            emailSubject = prependAppNameInSubject(emailSubject)
         }
 
         if (templateData) {
