@@ -4,6 +4,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 /**
  * Utility class to perform local date related operations.
@@ -47,5 +48,23 @@ class LocalDateUtils {
         zoneId = zoneId ?: ZoneId.systemDefault()
 
         Date.from(localDate.atStartOfDay().atZone(zoneId).toInstant())
+    }
+
+    static Date parseISODateTime(String dateTime) {
+        if (!dateTime) {
+            return null
+        }
+
+        LocalDateTime localDateTime = LocalDateTime.parse(dateTime, DateTimeFormatter.ISO_DATE_TIME)
+        LocalDateUtils.toDate(localDateTime, null)
+    }
+
+    static Date parseISODate(String date) {
+        if (!date) {
+            return null
+        }
+
+        LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ISO_DATE)
+        LocalDateUtils.toDate(localDate, null)
     }
 }
