@@ -1,5 +1,6 @@
 package com.wizpanda.utils
 
+import grails.util.Environment
 import grails.util.Holders
 import org.grails.web.json.JSONObject
 import org.springframework.web.context.request.RequestContextHolder
@@ -73,6 +74,12 @@ class RequestUtils {
         maskData(KernelUtils.clone(params))
     }
 
+    /**
+     * Get the IP address of the current request. If this Grails app is running behind a proxy then try to get the client IP with some
+     * predefined header names.
+     * @param request
+     * @return
+     */
     static getIPAddress(HttpServletRequest request = getCurrentRequest()) {
         String unknown = "127.0.0.1"
         if (!request) {
@@ -88,5 +95,47 @@ class RequestUtils {
         }
 
         return ipAddress ?: request.remoteAddr
+    }
+
+    /**
+     * Construct the server URL based on the incoming request.
+     * @param request
+     * @return Server URL for example, http://example.com
+     */
+    static String constructServerURL(HttpServletRequest request = getCurrentRequest()) {
+        if (!request) {
+            request = getCurrentRequest()
+        }
+
+        String protocol = request.scheme
+        String serverName = request.serverName
+        String port = request.serverPort
+        String serverURL = "$protocol://$serverName"
+        StringBuilder requestURL = new StringBuilder(request.getRequestURL().toString())
+
+        if (Environment.isDevelopmentMode()) {
+            serverURL += ":$port"
+        }
+        return serverURL
+    }
+
+    /**
+     * Generate the complete request URL (along with the query string (if any).
+     * @param request
+     * @return Request URL for example, http://example.com/api/user/update?username=john
+     */
+    static String getRequestURL(HttpServletRequest request = getCurrentRequest()) {
+        if (!request) {
+            request = getCurrentRequest()
+        }
+
+        StringBuilder requestURL = new StringBuilder(request.getRequestURL().toString())
+        String queryString = request.getQueryString()
+
+        if (queryString == null) {
+            return requestURL.toString()
+        }
+
+        return requestURL.append('?').append(queryString).toString()
     }
 }
