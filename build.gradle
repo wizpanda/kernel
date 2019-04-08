@@ -9,7 +9,7 @@ buildscript {
     }
 }
 
-version "2.0.9"
+version "2.0.10"
 group "com.wizpanda.plugins"
 
 apply plugin: "idea"
