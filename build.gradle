@@ -42,6 +42,7 @@ dependencies {
     compile "org.grails.plugins:scaffolding"
 
     compile "org.hashids:hashids:1.0.1"
+    compile "org.codehaus.groovy.modules.http-builder:http-builder:0.7.1"
     provided "org.grails.plugins:views-json:1.2.7"
 
     profile "org.grails.profiles:web-plugin"
