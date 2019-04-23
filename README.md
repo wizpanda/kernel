@@ -2,6 +2,28 @@
 
 A simple Grails plugin which provide some core functionality and utility classes for a Grails application.
 
+## Usage
+
+### Slack Server Notifier
+
+Configure the following config in your `application.groovy` file:
+
+```groovy
+grails.plugin.kernel.server.slack.notify.enabled = true
+grails.plugin.kernel.server.slack.notify.webhookURL = "https://hooks.slack.com/services/xxxxxx/xxxxxxx/jJ5dbjbCnfB8EN5dBugFi3d"
+```
+
+Add `ServerSlackNotifier.notifyServerStartup()` in `Bootstrap.groovy` file in the last line of `def init` closure. This will notify the 
+configured Slack channel on app startup with following info:
+
+![image](https://user-images.githubusercontent.com/1804514/56596307-f73ba500-660d-11e9-93e2-fcb8f582b056.png)
+
+Add `ServerSlackNotifier.notifyServerShutdown()` in `Bootstrap.groovy` file in the last line of `def destroy` closure. This will notify 
+the configured Slack channel on app shutdown with following info:
+
+![image](https://user-images.githubusercontent.com/1804514/56596481-4681d580-660e-11e9-8f0b-4556f2c84b38.png)
+
+
 ## Compatibility
 
 Grails Version | Supported
