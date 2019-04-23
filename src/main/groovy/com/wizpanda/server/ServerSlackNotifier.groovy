@@ -3,6 +3,7 @@ package com.wizpanda.server
 import com.wizpanda.utils.KernelUtils
 import grails.util.Environment
 import grails.util.Holders
+import grails.util.Metadata
 import groovy.util.logging.Slf4j
 import groovyx.net.http.ContentType
 import groovyx.net.http.HttpResponseDecorator
@@ -35,7 +36,7 @@ class ServerSlackNotifier {
      */
     static void notifyServerStartup() {
         String message = getCommonMessage("started")
-        sendSlackMessage(message)
+        sendSlackMessage(message, "good")
     }
 
     /**
@@ -43,10 +44,51 @@ class ServerSlackNotifier {
      */
     static void notifyServerShutdown() {
         String message = getCommonMessage("shutting down")
-        sendSlackMessage(message)
+        sendSlackMessage(message, "danger")
     }
 
-    private static void sendSlackMessage(String message) {
+    /**
+     * Get list of attachments (information) to be posted along with the message
+     * @return
+     */
+    private static List<Map> getInfoAttachments(String color) {
+        Metadata metadata = Holders.getGrailsApplication().metadata
+        List<Map> fields = []
+
+        Map os = metadata["os"]
+        fields << [
+                short: true,
+                title: "Build Version",
+                value: metadata["info.app.version"]
+        ]
+
+        fields << [
+                short: true,
+                title: "Operating System",
+                value: os.name + " " + os.version + " (${os.arch})"
+        ]
+
+        fields << [
+                short: true,
+                title: "User",
+                value: metadata["user.name"]
+        ]
+
+        fields << [
+                short: true,
+                title: "PID",
+                value: System.getProperty("PID")
+        ]
+
+        Map fieldAttachment = [
+                fields: fields,
+                color: color
+        ]
+
+        [fieldAttachment]
+    }
+
+    private static void sendSlackMessage(String message, String color) {
         if (Environment.isDevelopmentMode()) {
             return
         }
@@ -58,7 +100,7 @@ class ServerSlackNotifier {
 
         log.debug "Sending [$message] to Slack"
 
-        Map body = [text: message]
+        Map body = [text: message, attachments: getInfoAttachments(color)]
         if (config.channel) {
             body.channel = config.channel
         }
