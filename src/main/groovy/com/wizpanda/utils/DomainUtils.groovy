@@ -1,5 +1,6 @@
 package com.wizpanda.utils
 
+import grails.validation.ValidationException
 import org.apache.commons.logging.Log
 import org.grails.datastore.gorm.GormEntity
 import org.slf4j.Logger
@@ -25,7 +26,11 @@ class DomainUtils {
         save(domainInstance, [flush: flush], log)
     }
 
-    static save(GormEntity domainInstance, Map params, def log) {
+    static boolean saveWithFailOnError(GormEntity domainInstance, boolean flush, Logger log) {
+        save(domainInstance, [flush: flush, failOnError: true], log)
+    }
+
+    static boolean save(GormEntity domainInstance, Map params, def log) {
         if (!domainInstance) {
             return false
         }
@@ -34,6 +39,11 @@ class DomainUtils {
 
         if (domainInstance.hasErrors()) {
             log.warn "Error saving $domainInstance $domainInstance.errors"
+
+            if (params.failOnError) {
+                throw new ValidationException("Validation error occurred during call to save()", domainInstance.errors)
+            }
+
             return false
         }
 
