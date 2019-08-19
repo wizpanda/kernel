@@ -6,11 +6,14 @@ import com.wizpanda.exception.NotAcceptableException
 import com.wizpanda.exception.OperationFailedException
 import com.wizpanda.exception.ResourceNotFoundException
 import grails.validation.ValidationException
+import org.springframework.context.MessageSource
 import org.springframework.http.HttpStatus
 import org.springframework.validation.FieldError
 import org.springframework.validation.ObjectError
 
 trait CommonExceptionHandler extends BaseController {
+
+    MessageSource messageSource
 
     def respondException(ErrorCodeAwareException e, HttpStatus status) {
         Map errorResponse = [code: e.errorCode, message: e.message]
@@ -41,7 +44,7 @@ trait CommonExceptionHandler extends BaseController {
         respondException(e, HttpStatus.NOT_FOUND)
     }
 
-    def handleValidtionException(ValidationException e) {
+    def handleValidationException(ValidationException e) {
         Map errorResponse = [type: "validation-error", message: e.message]
 
         ObjectError fieldError = e.errors.getAllErrors()[0]
@@ -55,7 +58,8 @@ trait CommonExceptionHandler extends BaseController {
 
         // This is for backward compatibility
         //noinspection GroovyAssignabilityCheck
-        errorResponse.put("errors", [[message: e.message, severity: "error", ttl: 10000]])
+        String message = messageSource.getMessage(fieldError, null)
+        errorResponse.put("errors", [[message: message, severity: "error", ttl: 10000]])
 
         respond(errorResponse, HttpStatus.UNPROCESSABLE_ENTITY)
     }
