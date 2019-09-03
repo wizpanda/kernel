@@ -21,7 +21,7 @@ class ZipFileUtils {
         boolean isDirectory = file.isDirectory()
 
         StringBuilder zipFilePath = new StringBuilder(file.getParent())
-                .append(File.pathSeparator)
+                .append(File.separator)
 
         if (isDirectory) {
             zipFilePath.append(file.name)
