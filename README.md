@@ -4,6 +4,14 @@ A simple Grails plugin which provide some core functionality and utility classes
 
 ## Usage
 
+### Logging
+
+`KernelLogging` class provides various value to your Grails application in development as well as in production. Following are the benefits:
+
+1. In development, Hibernate queries are logging with faded color so that you can keep watch on your SQL performance and it doesn't 
+affect your normal logging.
+2. Provides daily rotating logging for production with configurable directory and file name prefix.
+
 ### Slack Server Notifier
 
 Configure the following config in your `application.groovy` file:
