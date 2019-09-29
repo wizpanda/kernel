@@ -1,5 +1,10 @@
 # Changelog
 
+## v2.0.18
+
+1. Logging session events
+2. Logging transaction events
+
 ## v2.0.17
 
 1. Added `KernlLogging` utility class for logback configuration.
