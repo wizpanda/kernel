@@ -6,6 +6,7 @@ import ch.qos.logback.classic.gaffer.ConfigurationDelegate
 import ch.qos.logback.core.ConsoleAppender
 import ch.qos.logback.core.rolling.RollingFileAppender
 import ch.qos.logback.core.rolling.TimeBasedRollingPolicy
+import com.wizpanda.logback.DevelopmentLoggingFilter
 import grails.util.BuildSettings
 import grails.util.Environment
 import org.springframework.boot.logging.logback.ColorConverter
@@ -52,7 +53,10 @@ class KernelLogging {
             baseDirectory = loggingDirectory
         }
 
-        return "${baseDirectory}/grails/${appName}-%d{yyyy-MM-dd}.log"
+        String fileName = "${baseDirectory}/grails/${appName}-%d{yyyy-MM-dd}.log"
+        println "File name pattern will be [$fileName]"
+
+        fileName
     }
 
     private static void callClosure(Object delegate, @DelegatesTo(ConfigurationDelegate) Closure closure) {
@@ -111,12 +115,19 @@ class KernelLogging {
                         charset = Charset.forName("UTF-8")
                         pattern = DULL_PATTERN
                     }
+
+                    filter(DevelopmentLoggingFilter)
                 }
 
                 List<String> commonAppenderNames = ["DULL_STDOUT", "ROLLING"]
                 logger("org.hibernate.cache.internal", Level.DEBUG, commonAppenderNames, false)
                 logger("org.hibernate.engine.internal", Level.INFO, commonAppenderNames, false)
                 logger("org.hibernate.SQL", Level.TRACE, commonAppenderNames, false)
+                //logger("org.hibernate", TRACE, ["DULL_STDOUT"], false)
+                //logger("org.grails.orm.hibernate", DEBUG, ["DULL_STDOUT"], false)
+                logger("org.hibernate.internal.SessionImpl", Level.TRACE, ["DULL_STDOUT"], false)
+                logger("org.hibernate.event.internal.AbstractFlushingEventListener", Level.TRACE, ["DULL_STDOUT"], false)
+                logger("org.hibernate.engine.transaction.internal.TransactionImpl", Level.DEBUG, ["DULL_STDOUT"], false)
 
                 //logger("org.hibernate.type.descriptor.sql.BasicBinder", Level.TRACE, commonAppenderNames, false)
 
