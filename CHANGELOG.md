@@ -1,5 +1,12 @@
 # Changelog
 
+## v2.1.0
+
+1. Feature: Added `SentryLogger` to log errors to Sentry
+2. Breaking Change: Changing the package of a few classes.
+3. Breaking Change: Changing traits to abstract classes.
+4. Improvement: Responding first Validation error message directly.
+
 ## v2.0.18
 
 1. Logging session events
