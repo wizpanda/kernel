@@ -21,10 +21,6 @@ trait CommonExceptionHandler extends BaseController {
             errorResponse.putAll(e.additionalData)
         }
 
-        // This is for backward compatibility
-        //noinspection GroovyAssignabilityCheck
-        errorResponse.put("errors", [[errorCode: e.errorCode, message: e.message, severity: "error", ttl: 10000]])
-
         respond(errorResponse, status)
     }
 
@@ -45,21 +41,20 @@ trait CommonExceptionHandler extends BaseController {
     }
 
     def handleValidationException(ValidationException e) {
-        Map errorResponse = [type: "validation-error", message: e.message]
-
         ObjectError fieldError = e.errors.getAllErrors()[0]
-        errorResponse.code = fieldError.getCode()
-        errorResponse.objectName = fieldError.getObjectName()
+        String message = messageSource.getMessage(fieldError, null)
+
+        Map errorResponse = [
+                message   : message,
+                type      : "validation-error",
+                code      : fieldError.getCode(),
+                objectName: fieldError.getObjectName()
+        ]
 
         if (fieldError instanceof FieldError) {
             errorResponse.field = fieldError.getField()
             errorResponse.rejectedValue = fieldError.getRejectedValue()
         }
-
-        // This is for backward compatibility
-        //noinspection GroovyAssignabilityCheck
-        String message = messageSource.getMessage(fieldError, null)
-        errorResponse.put("errors", [[message: message, severity: "error", ttl: 10000]])
 
         respond(errorResponse, HttpStatus.UNPROCESSABLE_ENTITY)
     }
