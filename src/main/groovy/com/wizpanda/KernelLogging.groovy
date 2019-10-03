@@ -6,9 +6,9 @@ import ch.qos.logback.classic.gaffer.ConfigurationDelegate
 import ch.qos.logback.core.ConsoleAppender
 import ch.qos.logback.core.rolling.RollingFileAppender
 import ch.qos.logback.core.rolling.TimeBasedRollingPolicy
-import com.wizpanda.logback.DevelopmentLoggingFilter
+import com.wizpanda.logging.DevelopmentLoggingFilter
+import com.wizpanda.utils.KernelUtils
 import grails.util.BuildSettings
-import grails.util.Environment
 import org.springframework.boot.logging.logback.ColorConverter
 import org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter
 
@@ -47,7 +47,7 @@ class KernelLogging {
         String baseDirectory
 
         File targetDir = BuildSettings.TARGET_DIR
-        if (isLocalEnvironment() && targetDir != null) {
+        if (KernelUtils.isLocalEnvironment() && targetDir != null) {
             baseDirectory = targetDir.toString()
         } else {
             baseDirectory = loggingDirectory
@@ -63,10 +63,6 @@ class KernelLogging {
         closure.delegate = delegate
         closure.resolveStrategy = Closure.DELEGATE_FIRST
         closure.call()
-    }
-
-    static boolean isLocalEnvironment() {
-        (Environment.current == Environment.DEVELOPMENT) || (Environment.current == Environment.TEST)
     }
 
     /**
@@ -109,7 +105,7 @@ class KernelLogging {
             logger("com.wizpanda", Level.DEBUG)
             logger("grails.plugin.asyncmail.AsynchronousMailProcessService", Level.DEBUG)
 
-            if (isLocalEnvironment()) {
+            if (KernelUtils.isLocalEnvironment()) {
                 appender("DULL_STDOUT", ConsoleAppender) {
                     encoder(PatternLayoutEncoder) {
                         charset = Charset.forName("UTF-8")

@@ -1,5 +1,6 @@
 package com.wizpanda.utils
 
+import grails.util.Environment
 import grails.util.Holders
 import org.grails.web.json.JSONObject
 
@@ -20,5 +21,9 @@ class KernelUtils {
 
     static JSONObject clone(JSONObject original) {
         new JSONObject(original, original.names().toArray() as String[])
+    }
+
+    static boolean isLocalEnvironment() {
+        (Environment.current == Environment.DEVELOPMENT) || (Environment.current == Environment.TEST)
     }
 }
