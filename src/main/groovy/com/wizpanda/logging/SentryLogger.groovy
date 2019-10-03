@@ -25,9 +25,22 @@ class SentryLogger {
 
     private static SentryClient sentryClient
     private static Closure userInterfaceGenerator
+    private static boolean useInLocalEnvironment = false
+
+    static boolean shouldNotUseSentry() {
+        if (KernelUtils.isLocalEnvironment()) {
+            return !useInLocalEnvironment
+        }
+
+        false
+    }
+
+    static void setUseInLocalEnvironment(boolean shouldUse) {
+        useInLocalEnvironment = shouldUse
+    }
 
     static void init(String serverName, String dsn) {
-        if (KernelUtils.isLocalEnvironment()) {
+        if (shouldNotUseSentry()) {
             return
         }
 
@@ -49,7 +62,7 @@ class SentryLogger {
     static void capture(String message, Map<String, Object> extras = [:], Event.Level level = Event.Level.ERROR) {
         logInConsole(message, null, extras)
 
-        if (KernelUtils.isLocalEnvironment()) {
+        if (shouldNotUseSentry()) {
             return
         }
 
@@ -67,7 +80,7 @@ class SentryLogger {
     }
 
     static void capture(Throwable throwable, Map<String, Object> extras = [:]) {
-        if (KernelUtils.isLocalEnvironment()) {
+        if (shouldNotUseSentry()) {
             return
         }
 
@@ -75,7 +88,7 @@ class SentryLogger {
     }
 
     private static void logInConsole(String message, Throwable throwable, Map<String, Object> extras = [:]) {
-        if (KernelUtils.isLocalEnvironment()) {
+        if (shouldNotUseSentry()) {
             log.error "$message, extras: $extras", throwable
             return
         }
@@ -90,7 +103,7 @@ class SentryLogger {
     static void capture(String message, Throwable throwable, Map<String, Object> extras = [:]) {
         logInConsole(message, throwable, extras)
 
-        if (KernelUtils.isLocalEnvironment()) {
+        if (shouldNotUseSentry()) {
             return
         }
 
