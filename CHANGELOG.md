@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.1.1
+
+1. Improvement: Added an option to use the sentry in the local environment as well.
+
 ## v2.1.0
 
 1. Feature: Added `SentryLogger` to log errors to Sentry
