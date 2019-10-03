@@ -11,11 +11,17 @@ import org.springframework.http.HttpStatus
 import org.springframework.validation.FieldError
 import org.springframework.validation.ObjectError
 
-trait CommonExceptionHandler extends BaseController {
+/**
+ * An abstract class which can be extended by any Grails controller class for handling some commonly used Exceptions defined by
+ * this plugin only.
+ *
+ * @author Shashank Agrawal
+ */
+abstract class KernelExceptionHandler extends KernelBaseController {
 
     MessageSource messageSource
 
-    def respondException(ErrorCodeAwareException e, HttpStatus status) {
+    protected def respondException(ErrorCodeAwareException e, HttpStatus status) {
         Map errorResponse = [code: e.errorCode, message: e.message]
         if (e.additionalData) {
             errorResponse.putAll(e.additionalData)
@@ -24,23 +30,23 @@ trait CommonExceptionHandler extends BaseController {
         respond(errorResponse, status)
     }
 
-    def handleNotAcceptableException(NotAcceptableException e) {
+    protected def handleNotAcceptableException(NotAcceptableException e) {
         respondException(e, HttpStatus.NOT_ACCEPTABLE)
     }
 
-    def handleInvalidDataException(InvalidDataException e) {
+    protected def handleInvalidDataException(InvalidDataException e) {
         respondException(e, HttpStatus.NOT_ACCEPTABLE)
     }
 
-    def handleOperationFailedException(OperationFailedException e) {
+    protected def handleOperationFailedException(OperationFailedException e) {
         respondException(e, HttpStatus.NOT_ACCEPTABLE)
     }
 
-    def handleResourceNotFoundException(ResourceNotFoundException e) {
+    protected def handleResourceNotFoundException(ResourceNotFoundException e) {
         respondException(e, HttpStatus.NOT_FOUND)
     }
 
-    def handleValidationException(ValidationException e) {
+    protected def handleValidationException(ValidationException e) {
         ObjectError fieldError = e.errors.getAllErrors()[0]
         String message = messageSource.getMessage(fieldError, null)
 
