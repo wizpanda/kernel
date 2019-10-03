@@ -1,5 +1,6 @@
 package com.wizpanda.utils
 
+import com.wizpanda.logging.KernelRemoteAddressResolver
 import grails.util.Environment
 import grails.util.Holders
 import org.grails.web.json.JSONObject
@@ -15,8 +16,6 @@ import javax.servlet.http.HttpSession
  * @author Shashank Agrawal
  */
 class RequestUtils {
-
-    private static final List<String> IP_HEADERS = ["X-Real-IP", "Client-IP", "X-Forwarded-For", "Proxy-Client-IP", "rlnclientipaddr"]
 
     private RequestUtils() {
         // Hide default constructor as this is a utility class
@@ -81,20 +80,7 @@ class RequestUtils {
      * @return
      */
     static getIPAddress(HttpServletRequest request = getCurrentRequest()) {
-        String unknown = "127.0.0.1"
-        if (!request) {
-            return unknown
-        }
-
-        String ipAddress = unknown
-
-        IP_HEADERS.each { header ->
-            if (!ipAddress || unknown.equalsIgnoreCase(ipAddress)) {
-                ipAddress = request.getHeader(header)
-            }
-        }
-
-        return ipAddress ?: request.remoteAddr
+        KernelRemoteAddressResolver.instance.getRemoteAddress(request)
     }
 
     /**
