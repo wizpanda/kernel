@@ -21,7 +21,7 @@ abstract class KernelExceptionHandler extends KernelBaseController {
 
     MessageSource messageSource
 
-    protected def respondException(ErrorCodeAwareException e, HttpStatus status) {
+    def respondException(ErrorCodeAwareException e, HttpStatus status) {
         Map errorResponse = [code: e.errorCode, message: e.message]
         if (e.additionalData) {
             errorResponse.putAll(e.additionalData)
@@ -30,23 +30,23 @@ abstract class KernelExceptionHandler extends KernelBaseController {
         respond(errorResponse, status)
     }
 
-    protected def handleNotAcceptableException(NotAcceptableException e) {
+    def handleNotAcceptableException(NotAcceptableException e) {
         respondException(e, HttpStatus.NOT_ACCEPTABLE)
     }
 
-    protected def handleInvalidDataException(InvalidDataException e) {
+    def handleInvalidDataException(InvalidDataException e) {
         respondException(e, HttpStatus.NOT_ACCEPTABLE)
     }
 
-    protected def handleOperationFailedException(OperationFailedException e) {
+    def handleOperationFailedException(OperationFailedException e) {
         respondException(e, HttpStatus.NOT_ACCEPTABLE)
     }
 
-    protected def handleResourceNotFoundException(ResourceNotFoundException e) {
+    def handleResourceNotFoundException(ResourceNotFoundException e) {
         respondException(e, HttpStatus.NOT_FOUND)
     }
 
-    protected def handleValidationException(ValidationException e) {
+    def handleValidationException(ValidationException e) {
         ObjectError fieldError = e.errors.getAllErrors()[0]
         String message = messageSource.getMessage(fieldError, null)
 
