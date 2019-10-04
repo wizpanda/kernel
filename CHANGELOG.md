@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.1.2
+
+1. Fix: Removed "protected" access identifier from declarative exception handling methods.
+
 ## v2.1.1
 
 1. Improvement: Added an option to use the sentry in the local environment as well.
