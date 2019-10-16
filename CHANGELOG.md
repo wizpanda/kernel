@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.1.3
+
+1. Added a new method to track validation errors to Sentry.
+
 ## v2.1.2
 
 1. Fix: Removed "protected" access identifier from declarative exception handling methods.
