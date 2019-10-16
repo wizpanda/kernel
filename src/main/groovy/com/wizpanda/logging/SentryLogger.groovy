@@ -12,6 +12,7 @@ import io.sentry.event.EventBuilder
 import io.sentry.event.interfaces.ExceptionInterface
 import io.sentry.event.interfaces.HttpInterface
 import io.sentry.event.interfaces.UserInterface
+import org.grails.datastore.gorm.GormEntity
 
 import javax.servlet.http.HttpServletRequest
 
@@ -85,6 +86,18 @@ class SentryLogger {
         }
 
         capture(throwable.getMessage(), throwable, extras)
+    }
+
+    /**
+     *
+     * @param gormEntity
+     */
+    static void captureValidationError(GormEntity gormEntity, String message = null) {
+        if (shouldNotUseSentry()) {
+            return
+        }
+
+        capture("Validation failed for $gormEntity", [errors: gormEntity.errors, message: message])
     }
 
     private static void logInConsole(String message, Throwable throwable, Map<String, Object> extras = [:]) {

@@ -6,7 +6,6 @@ import ch.qos.logback.classic.gaffer.ConfigurationDelegate
 import ch.qos.logback.core.ConsoleAppender
 import ch.qos.logback.core.rolling.RollingFileAppender
 import ch.qos.logback.core.rolling.TimeBasedRollingPolicy
-import com.wizpanda.logging.DevelopmentLoggingFilter
 import com.wizpanda.utils.KernelUtils
 import grails.util.BuildSettings
 import org.springframework.boot.logging.logback.ColorConverter
@@ -102,6 +101,7 @@ class KernelLogging {
                 }
             }
 
+            logger("liquibase", Level.INFO)
             logger("com.wizpanda", Level.DEBUG)
             logger("grails.plugin.asyncmail.AsynchronousMailProcessService", Level.DEBUG)
 
