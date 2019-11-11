@@ -28,6 +28,17 @@ class DateRangeUtils {
         new DateRange([start: start, end: end])
     }
 
+    DateRange getDateRangeOfDay(Date date) {
+        calendar.setTime(date)
+        setBeginningOfDay()
+        Date start = calendar.getTime()
+
+        setEndOfDay()
+        Date end = calendar.getTime()
+
+        new DateRange([start: start, end: end])
+    }
+
     DateRange getDateRangeForThisWeek() {
         calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
         setBeginningOfDay()
