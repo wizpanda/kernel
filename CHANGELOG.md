@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.1.4
+
+1. Added a new method `getDateRangeOfDay` in `DateRangeUtils`
+
 ## v2.1.3
 
 1. Added a new method to track validation errors to Sentry.
