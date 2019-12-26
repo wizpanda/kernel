@@ -1,4 +1,6 @@
-# Kernel (v2.0.11)
+# Kernel
+
+[ ![Download](https://api.bintray.com/packages/wizpanda/grails-plugins/kernel/images/download.svg) ](https://bintray.com/wizpanda/grails-plugins/kernel/_latestVersion)
 
 A simple Grails plugin which provide some core functionality and utility classes for a Grails application.
 
