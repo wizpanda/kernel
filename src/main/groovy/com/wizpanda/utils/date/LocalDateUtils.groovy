@@ -29,11 +29,12 @@ class LocalDateUtils {
     static DateRange getDateRangeForLast7Days(ZoneId zoneId) {
         // Determine current time as seen by the user's location (time zone).
         LocalDateTime now = LocalDateTime.now(zoneId)
-        LocalDateTime last7thDay = now.minusDays(7).toLocalDate().atTime(LocalTime.MIDNIGHT)
+        LocalDateTime last7thDay = now.minusDays(7).toLocalDate().atTime(LocalTime.MIDNIGHT)    // or LocalTime.MIN
+        LocalDateTime currentDay = now.minusDays(0).toLocalDate().atTime(LocalTime.MAX)
 
         DateRange dateRange = new DateRange()
         dateRange.start = toDate(last7thDay, zoneId)
-        dateRange.end = toDate(now, zoneId)
+        dateRange.end = toDate(currentDay, zoneId)
 
         return dateRange
     }
