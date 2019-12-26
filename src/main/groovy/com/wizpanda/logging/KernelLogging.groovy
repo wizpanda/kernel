@@ -8,6 +8,7 @@ import ch.qos.logback.core.rolling.RollingFileAppender
 import ch.qos.logback.core.rolling.TimeBasedRollingPolicy
 import com.wizpanda.utils.KernelUtils
 import grails.util.BuildSettings
+import grails.util.Environment
 import org.springframework.boot.logging.logback.ColorConverter
 import org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter
 
@@ -23,6 +24,7 @@ class KernelLogging {
 
     static private String appName
     static private String loggingDirectory = "/var/log"
+    static private List<String> environmentsForExtraLogs = [Environment.DEVELOPMENT.name, Environment.TEST.name]
 
     static final String PATTERN =
             "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} " + // Date
@@ -62,6 +64,18 @@ class KernelLogging {
         closure.delegate = delegate
         closure.resolveStrategy = Closure.DELEGATE_FIRST
         closure.call()
+    }
+
+    /**
+     * Set the environments for which the extra DULL logs should be logged. The default are for "development" & "test". Call this method
+     * before calling {#configure} method.
+     *
+     * Setting the production environment is not recommended.
+     *
+     * @param environments
+     */
+    static void setEnvironmentsForExtraLogs(List<String> environments) {
+        environmentsForExtraLogs = environments
     }
 
     /**
@@ -105,7 +119,7 @@ class KernelLogging {
             logger("com.wizpanda", Level.DEBUG)
             logger("grails.plugin.asyncmail.AsynchronousMailProcessService", Level.DEBUG)
 
-            if (KernelUtils.isLocalEnvironment()) {
+            if (environmentsForExtraLogs.contains(Environment.current.name)) {
                 appender("DULL_STDOUT", ConsoleAppender) {
                     encoder(PatternLayoutEncoder) {
                         charset = Charset.forName("UTF-8")
