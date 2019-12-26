@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.1.5
+
+1. Added an option to change the environment for extra dull logs.
+2. Added utility methods for request URLs.
+3. Updating LocalDateUtils to get the correct 7 days range.
+
 ## v2.1.4
 
 1. Added a new method `getDateRangeOfDay` in `DateRangeUtils`
