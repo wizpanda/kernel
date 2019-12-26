@@ -4,6 +4,7 @@ import com.wizpanda.logging.KernelRemoteAddressResolver
 import grails.util.Environment
 import grails.util.Holders
 import org.grails.web.json.JSONObject
+import org.grails.web.servlet.mvc.GrailsWebRequest
 import org.springframework.web.context.request.RequestContextHolder
 
 import javax.servlet.http.HttpServletRequest
@@ -21,13 +22,17 @@ class RequestUtils {
         // Hide default constructor as this is a utility class
     }
 
-    static HttpServletRequest getCurrentRequest() {
+    static GrailsWebRequest getWebRequest() {
         try {
-            return RequestContextHolder.currentRequestAttributes().request
-        } catch (IllegalStateException e) {
+            (GrailsWebRequest) RequestContextHolder.currentRequestAttributes()
+        } catch (IllegalStateException ignore) {
             // We might be in a thread where there is no request
             return null
         }
+    }
+
+    static HttpServletRequest getCurrentRequest() {
+        getWebRequest()?.getRequest()
     }
 
     static HttpSession getSession(boolean create = false) {
