@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.1.6
+
+1. Using current request Locale while resolving message.
+
 ## v2.1.5
 
 1. Added an option to change the environment for extra dull logs.
