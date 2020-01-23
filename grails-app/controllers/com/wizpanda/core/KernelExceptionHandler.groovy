@@ -7,6 +7,7 @@ import com.wizpanda.exception.OperationFailedException
 import com.wizpanda.exception.ResourceNotFoundException
 import grails.validation.ValidationException
 import org.springframework.context.MessageSource
+import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.http.HttpStatus
 import org.springframework.validation.FieldError
 import org.springframework.validation.ObjectError
@@ -48,7 +49,7 @@ abstract class KernelExceptionHandler extends KernelBaseController {
 
     def handleValidationException(ValidationException e) {
         ObjectError fieldError = e.errors.getAllErrors()[0]
-        String message = messageSource.getMessage(fieldError, null)
+        String message = messageSource.getMessage(fieldError, LocaleContextHolder.getLocale())
 
         Map errorResponse = [
                 message   : message,
