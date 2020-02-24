@@ -54,6 +54,9 @@ dependencies {
     testCompile "org.grails.plugins:geb"
     testRuntime "org.seleniumhq.selenium:selenium-htmlunit-driver:2.47.1"
     testRuntime "net.sourceforge.htmlunit:htmlunit:2.18"
+
+    // payTm library to generate checksum and other stuffs
+    compile fileTree(dir: './lib', include: ['*.jar'])
 }
 
 bootRun {
