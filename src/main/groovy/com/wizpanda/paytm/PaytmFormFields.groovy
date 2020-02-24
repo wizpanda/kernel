@@ -14,22 +14,19 @@ class PaytmFormFields {
     private static final String MERCHANT_ID = Holders.flatConfig.get("paytm.merchantID")
     private static final String WEBSITE = Holders.flatConfig.get("paytm.website")
     private static final String INDUSTRY_TYPE_ID = Holders.flatConfig.get("paytm.industryTypeID")
-    private static final String CHANNEL_ID = Holders.flatConfig.get("paytm.channelID")
     static final String TRANSACTION_URL = Holders.flatConfig.get("paytm.transactionURL")
 
-    Map user
-    String orderID
-    BigDecimal amount
-    String callbackURL
+    PaytmUser user
+    PaytmOrder paytmOrder
+    PaytmAdditionalData additionalData
 
     String checksum
-    Map hiddenParams = new TreeMap<String, String>()
+    Map<String, String> hiddenParams = new TreeMap<String, String>()
 
-    PaytmFormFields(Map user, String orderID, BigDecimal amount, String callbackURL) {
+    PaytmFormFields(PaytmUser user, PaytmOrder paytmOrder, PaytmAdditionalData additionalData) {
         this.user = user
-        this.orderID = orderID
-        this.amount = amount
-        this.callbackURL = callbackURL
+        this.paytmOrder = paytmOrder
+        this.additionalData = additionalData
 
         this.populateHiddenParams()
     }
@@ -38,16 +35,15 @@ class PaytmFormFields {
         hiddenParams.put("MID", MERCHANT_ID)
         hiddenParams.put("WEBSITE", WEBSITE)
         hiddenParams.put("INDUSTRY_TYPE_ID", INDUSTRY_TYPE_ID)
-        hiddenParams.put("CHANNEL_ID", CHANNEL_ID)
-        hiddenParams.put("ORDER_ID", orderID)
+        hiddenParams.put("CHANNEL_ID", additionalData.channelID.toString())
+        hiddenParams.put("ORDER_ID", paytmOrder.orderID)
         hiddenParams.put("CUST_ID", user.id)
         hiddenParams.put("MOBILE_NO", user.mobile)
         hiddenParams.put("EMAIL", user.email)
-        hiddenParams.put("TXN_AMOUNT", amount.toString())
+        hiddenParams.put("TXN_AMOUNT", paytmOrder.amount.toString())
         // https://stackoverflow.com/questions/29079574/gstringimpl-cannot-be-cast-to-java-lang-string
-        hiddenParams.put("CALLBACK_URL", callbackURL)
+        hiddenParams.put("CALLBACK_URL", additionalData.callbackURL.toString())
 
         checksum = PaytmUtils.generateChecksum(hiddenParams as TreeMap<String, String>)
     }
-
 }
