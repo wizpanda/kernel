@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.1.7
+
+1. Feature: Added taglib and commonly used classes for [Paytm Basic checkout](https://developer.paytm.com/docs/v1/payment-gateway/).
+2. Feature: Added method `bind` in `DomainUtils` to avoid passing `null` when directly using `DataBindingUtils.bindObjectToInstance`.
+3. Improvement: Using `@GrailsCompileStatic` or `@CompileStatic` where possible.
+
 ## v2.1.6
 
 1. Using current request Locale while resolving message.
