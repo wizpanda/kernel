@@ -1,13 +1,8 @@
 package com.wizpanda.utils.date
 
-import grails.util.Holders
 import groovy.time.TimeCategory
 
-import java.text.SimpleDateFormat
-
 class DateUtils {
-
-    static SimpleDateFormat dateParser = new SimpleDateFormat(Holders.getConfig()["grails.databinding.dateFormats"][0])
 
     /**
      * "between" query in Grails criteria uses inclusive of both the dates. So when we have to get some database

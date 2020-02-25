@@ -4,6 +4,7 @@ import com.wizpanda.utils.KernelUtils
 import com.wizpanda.utils.RequestUtils
 import grails.util.Environment
 import grails.util.Metadata
+import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
 import io.sentry.Sentry
 import io.sentry.SentryClient
@@ -22,6 +23,7 @@ import javax.servlet.http.HttpServletRequest
  * @author Shashank Agrawal
  */
 @Slf4j
+@CompileStatic
 class SentryLogger {
 
     private static SentryClient sentryClient

@@ -1,5 +1,7 @@
 package com.wizpanda.utils.date
 
+import groovy.transform.CompileStatic
+
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -12,6 +14,7 @@ import java.time.format.DateTimeFormatter
  * @author Ankit Kumar Singh
  * @since 2.0.6
  */
+@CompileStatic
 class LocalDateUtils {
 
     static DateRange getDateRangeForToday(ZoneId zoneId) {

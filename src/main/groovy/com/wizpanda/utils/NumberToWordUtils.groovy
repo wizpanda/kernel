@@ -1,15 +1,19 @@
 package com.wizpanda.utils
 
-class NumberToWordUtils {
-    static List specialNames = [ "", " Thousand", " Million", " Billion", " Trillion", " Quadrillion", "Quintillion"];
+import groovy.transform.CompileStatic
 
-    static List tensNames = [
+@CompileStatic
+class NumberToWordUtils {
+
+    static List<String> specialNames = ["", " Thousand", " Million", " Billion", " Trillion", " Quadrillion", "Quintillion"];
+
+    static List<String> tensNames = [
             "", " Ten", " Twenty", " Thirty", " Forty", " Fifty", " Sixty", " Seventy", " Eighty", " Ninety"
     ];
 
-    static List numNames = [ "", " One", " Two", " Three", " Four", " Five", " Six", " Seven", " Eight", " Nine",
-                             "Ten", " Eleven", " Twelve", " Thirteen", " Fourteen", " Fifteen", " Sixteen" ,
-                                     "Seventeen", " Eighteen", " Nineteen"
+    static List<String> numNames = ["", " One", " Two", " Three", " Four", " Five", " Six", " Seven", " Eight", " Nine",
+                                    "Ten", " Eleven", " Twelve", " Thirteen", " Fourteen", " Fifteen", " Sixteen",
+                                    "Seventeen", " Eighteen", " Nineteen"
     ];
 
     private static String convertLessThanOneThousand(int number) {

@@ -4,6 +4,7 @@ import com.wizpanda.utils.KernelUtils
 import grails.util.Environment
 import grails.util.Holders
 import grails.util.Metadata
+import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
 import groovyx.net.http.ContentType
 import groovyx.net.http.HttpResponseDecorator
@@ -16,6 +17,7 @@ import org.springframework.http.MediaType
  * @author Shashank Agrawal
  */
 @Slf4j
+@CompileStatic
 class ServerSlackNotifier {
 
     static String getCommonMessage(String message) {
@@ -55,7 +57,7 @@ class ServerSlackNotifier {
         Metadata metadata = Holders.getGrailsApplication().metadata
         List<Map> fields = []
 
-        Map os = metadata["os"]
+        Map<String, String> os = metadata["os"] as Map
         fields << [
                 short: true,
                 title: "Build Version",
@@ -82,10 +84,10 @@ class ServerSlackNotifier {
 
         Map fieldAttachment = [
                 fields: fields,
-                color: color
+                color : color
         ]
 
-        [fieldAttachment]
+        [fieldAttachment] as List<Map>
     }
 
     private static void sendSlackMessage(String message, String color) {
@@ -93,7 +95,7 @@ class ServerSlackNotifier {
             return
         }
 
-        Map config = Holders.getFlatConfig()["grails.plugin.kernel.server.slack.notify"]
+        Map config = Holders.getFlatConfig().get("grails.plugin.kernel.server.slack.notify") as Map
         if (!config || !config.enabled) {
             return
         }
@@ -111,9 +113,9 @@ class ServerSlackNotifier {
 
         try {
             RESTClient restClient = new RESTClient(webhookURL)
-            HttpResponseDecorator response = restClient.post(args)
+            HttpResponseDecorator response = restClient.post(args) as HttpResponseDecorator
 
-            log.debug "Slack response: " + response.responseData
+            log.debug "Slack response: " + response.getData()
         } catch (Exception e) {
             log.error "Error notifying to Slack", e
         }

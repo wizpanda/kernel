@@ -1,5 +1,6 @@
 package com.wizpanda.core
 
+import grails.compiler.GrailsCompileStatic
 import grails.converters.JSON
 import grails.gorm.PagedResultList
 import org.grails.web.converters.exceptions.ConverterException
@@ -12,6 +13,7 @@ import org.springframework.http.HttpStatus
  *
  * @author Shashank Agrawal
  */
+@GrailsCompileStatic
 abstract class KernelBaseController {
 
     static responseFormats = ["json"]

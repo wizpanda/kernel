@@ -1,11 +1,13 @@
 package com.wizpanda.utils
 
+import groovy.transform.CompileStatic
 import org.hashids.Hashids
 
 /**
  * @author Shashank Agrawal
  * @since 0.0.1
  */
+@CompileStatic
 class RandomUtils {
 
     private static final int MINIMUM_RANDOM = 1
@@ -20,7 +22,7 @@ class RandomUtils {
     }
 
     static String randomPassword() {
-        return System.currentTimeMillis().encodeAsBase64().replaceAll("==", "")
+        return System.currentTimeMillis().encodeAsBase64().toString().replaceAll("==", "")
     }
 
     static String randomUniqueCode() {
@@ -31,7 +33,7 @@ class RandomUtils {
         return randomUniqueCode(UUID.randomUUID().toString(), minLength, generateRandomNumber())
     }
 
-    static String randomUniqueCode(String salt, int minLength, long... numbers) {
+    static String randomUniqueCode(String salt, int minLength, long ... numbers) {
         Hashids hashids = new Hashids(salt, minLength)
         return hashids.encode(numbers)
     }

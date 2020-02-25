@@ -3,12 +3,14 @@ package com.wizpanda.logging
 import ch.qos.logback.classic.spi.ILoggingEvent
 import ch.qos.logback.core.filter.Filter
 import ch.qos.logback.core.spi.FilterReply
+import groovy.transform.CompileStatic
 
 /**
  * A logback logging filter only used in development for filtering our some messages for hibernate.
  *
  * @author Shashank Agrawal
  */
+@CompileStatic
 class DevelopmentLoggingFilter extends Filter<ILoggingEvent> {
 
     @Override

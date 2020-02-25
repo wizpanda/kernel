@@ -3,6 +3,7 @@ package com.wizpanda.utils
 import com.wizpanda.logging.KernelRemoteAddressResolver
 import grails.util.Environment
 import grails.util.Holders
+import groovy.transform.CompileStatic
 import org.grails.web.json.JSONObject
 import org.grails.web.servlet.mvc.GrailsWebRequest
 import org.springframework.web.context.request.RequestContextHolder
@@ -13,9 +14,9 @@ import javax.servlet.http.HttpSession
 /**
  * Created by shashank on 06/03/17.
  *
- * @since 1.0.5
- * @author Shashank Agrawal
+ * @since 1.0.5* @author Shashank Agrawal
  */
+@CompileStatic
 class RequestUtils {
 
     private RequestUtils() {
@@ -51,7 +52,7 @@ class RequestUtils {
         }
 
         return query.split("&").collectEntries { param ->
-            param.split("=", 2).collect { URLDecoder.decode(it, "UTF-8") }
+            param.split("=", 2).collect { URLDecoder.decode(it.toString(), "UTF-8") }
         }
     }
 
@@ -59,9 +60,9 @@ class RequestUtils {
         return params.collect { key, value -> "$key=" + URLEncoder.encode(value?.toString(), "UTF-8") }.join("&")
     }
 
-    private static maskData(Map params) {
+    private static Map maskData(Map params) {
         Map clonedParams = params
-        Holders.getFlatConfig()["sensitive.keys"].each {
+        Holders.getFlatConfig().get("sensitive.keys").each {
             if (clonedParams[it]) {
                 clonedParams[it] = "****"
             }
@@ -75,7 +76,7 @@ class RequestUtils {
     }
 
     static JSONObject maskSensitiveData(JSONObject params) {
-        maskData(KernelUtils.clone(params))
+        maskData(KernelUtils.clone(params)) as JSONObject
     }
 
     /**

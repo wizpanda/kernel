@@ -1,10 +1,7 @@
 package com.wizpanda.core
 
-import com.wizpanda.exception.ErrorCodeAwareException
-import com.wizpanda.exception.InvalidDataException
-import com.wizpanda.exception.NotAcceptableException
-import com.wizpanda.exception.OperationFailedException
-import com.wizpanda.exception.ResourceNotFoundException
+import com.wizpanda.exception.*
+import grails.compiler.GrailsCompileStatic
 import grails.validation.ValidationException
 import org.springframework.context.MessageSource
 import org.springframework.context.i18n.LocaleContextHolder
@@ -18,6 +15,7 @@ import org.springframework.validation.ObjectError
  *
  * @author Shashank Agrawal
  */
+@GrailsCompileStatic
 abstract class KernelExceptionHandler extends KernelBaseController {
 
     MessageSource messageSource

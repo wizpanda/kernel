@@ -1,5 +1,8 @@
 package com.wizpanda.exception
 
+import groovy.transform.CompileStatic
+
+@CompileStatic
 // See CommonExceptionHandler.groovy for further usage
 class NotAcceptableException extends ErrorCodeAwareException {
 

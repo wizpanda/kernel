@@ -1,5 +1,8 @@
 package com.wizpanda.utils.date
 
+import groovy.transform.CompileStatic
+
+@CompileStatic
 class DateRangeUtils {
 
     private Calendar calendar = Calendar.getInstance()
