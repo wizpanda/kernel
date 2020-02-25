@@ -1,19 +1,21 @@
 package com.wizpanda.payment
 
 import com.wizpanda.paytm.PaytmFormFields
+import groovy.transform.CompileStatic
 
 /**
  * Common library class for payTm payment integration gsp page
  *
  * @author Viplav Soni
  */
+@CompileStatic
 class PaymentTagLib {
 
     static namespace = "kernel"
 
-    def paytmForm = { attrs, body ->
+    def paytmForm = { Map <String, Object> attrs, body ->
 
-        PaytmFormFields formFields = attrs.formFields
+        PaytmFormFields formFields = attrs.formFields as PaytmFormFields
 
         out << """<form method="post" action="${formFields.TRANSACTION_URL}" name="paytmForm">"""
 
