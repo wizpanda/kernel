@@ -38,9 +38,7 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-tomcat"
     compile "org.grails:grails-dependencies"
     compile "org.grails:grails-web-boot"
-    compile "org.grails.plugins:cache"
-    compile "org.grails.plugins:scaffolding"
-    compile "io.sentry:sentry:1.7.27"
+    compile "io.sentry:sentry:1.7.30"
     compile "org.hashids:hashids:1.0.1"
     compile "org.codehaus.groovy.modules.http-builder:http-builder:0.7.1"
     provided "org.grails.plugins:views-json:1.2.7"
@@ -56,11 +54,11 @@ dependencies {
     testRuntime "net.sourceforge.htmlunit:htmlunit:2.18"
 
     // payTm library to generate checksum and other stuffs
-    compile fileTree(dir: './lib', include: ['*.jar'])
+    compile fileTree(dir: "./lib", include: ["*.jar"])
 }
 
 bootRun {
-    jvmArgs = ['-Dspring.output.ansi.enabled=always']
+    jvmArgs = ["-Dspring.output.ansi.enabled=always"]
 }
 
 // Enable if you wish to package this plugin as a standalone application
