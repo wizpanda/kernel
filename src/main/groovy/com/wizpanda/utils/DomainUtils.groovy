@@ -1,32 +1,42 @@
 package com.wizpanda.utils
 
+import ch.qos.logback.classic.Logger
+import grails.compiler.GrailsCompileStatic
 import grails.validation.ValidationException
-import org.apache.commons.logging.Log
+import grails.web.databinding.DataBindingUtils
 import org.grails.datastore.gorm.GormEntity
-import org.slf4j.Logger
+import org.springframework.validation.BindingResult
 
 /**
  * @author Shashank Agrawal
  * @since 0.0.1
  */
+@GrailsCompileStatic
 class DomainUtils {
 
     /**
-     * This is to support older version of Grails before 3.2.0 since the log property injected at compile time
-     * into all classes is now an Slf4j Logger instance and not an instance of the Commons Logging Log class
+     * Simple wrapper around {@link DataBindingUtils#bindObjectToInstance(java.lang.Object, java.lang.Object)} to provide default null
+     * values to other parameters.
+     *
+     * @param object The object to bind to
+     * @param source The source object
+     * @param include The list of properties to include
+     * @param exclude The list of properties to exclude
+     * @param filter The prefix to filter by
+     * @return A BindingResult if there were errors or null if it was successful
      */
-    static boolean save(GormEntity domainInstance, boolean flush, Log log) {
-        save(domainInstance, [flush: flush], log)
+    static BindingResult bind(Object object, Object source, List include = null, List exclude = null, String filter = null) {
+        DataBindingUtils.bindObjectToInstance(object, source, include, exclude, filter)
     }
 
     /**
      * This is to support Grails version 3.2.0 or higher since the SLF4J is now default logger in Grails 3.2.0
      */
-    static boolean save(GormEntity domainInstance, boolean flush, Logger log) {
+    static boolean save(GormEntity domainInstance, boolean flush, def log) {
         save(domainInstance, [flush: flush], log)
     }
 
-    static boolean saveWithFailOnError(GormEntity domainInstance, boolean flush, Logger log) {
+    static boolean saveWithFailOnError(GormEntity domainInstance, boolean flush, def log) {
         save(domainInstance, [flush: flush, failOnError: true], log)
     }
 
@@ -38,7 +48,10 @@ class DomainUtils {
         domainInstance.validate()
 
         if (domainInstance.hasErrors()) {
-            log.warn "Error saving $domainInstance $domainInstance.errors"
+            // IntelliJ shows error when we use this class in the method arguments. So using this as workaround
+            if (log instanceof Logger) {
+                log.warn "Error saving $domainInstance $domainInstance.errors"
+            }
 
             if (params.failOnError) {
                 throw new ValidationException("Validation error occurred during call to save()", domainInstance.errors)
