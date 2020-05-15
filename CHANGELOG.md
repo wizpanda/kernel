@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.1.8
+
+1. Deleting Paytm related code & moved to https://github.com/wizpanda/kernel-paytm
+
 ## v2.1.7
 
 1. Feature: Added taglib and commonly used classes for [Paytm Basic checkout](https://developer.paytm.com/docs/v1/payment-gateway/).

@@ -38,7 +38,6 @@ the configured Slack channel on app shutdown with following info:
 
 Grails Version | Supported
 --------- | ---------
-2         |  Only v0.0.1
 3         |  >= v1.0.0
 3.3.x     |  >= v2.0.0
 
@@ -61,24 +60,23 @@ maven { url "http://dl.bintray.com/wizpanda/grails-plugins" }
 **Under `dependencies` section**
 
 ```groovy
-compile "com.wizpanda.plugins:kernel:0.1"
+compile "com.wizpanda.plugins:kernel:2.1.6"
 ```
 
-### Grails 2
+## Installing locally for development
 
-Add the following to your `BuildConfig.groovy` file:
-
-**Under `respositories` block**
+To develop in kernel plugin, you can install this plugin locally and run your app directly. For this, add the following in 
+`settings.gradle` of your Grails application:
 
 ```groovy
-mavenRepo "http://dl.bintray.com/wizpanda/grails-plugins"
+// For inline Kernel plugin development
+include ":kernel"
+project(":kernel").projectDir = new File("../../kernel")
 ```
 
-**Under `plugins` block**
+Then comment the line `compile "com.wizpanda.plugins:kernel:` from your `build.gradle` and add the line `compile project (':kernel')`. That's it.
 
-```groovy
-compile "com.wizpanda.plugins:kernel:0.0.1"
-```
+https://medium.com/wizpanda/another-way-of-adding-local-grails-plugin-to-a-grails-app-using-the-gradle-build-tool-d60ddaf326cb
 
 ## Releasing new version
 
