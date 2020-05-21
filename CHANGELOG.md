@@ -1,5 +1,10 @@
 # Changelog
 
+## v2.2.0
+
+1. Deleted the unused `MailUtils` methods for developers as we switched to Sentry.
+2. Added `httpResponseCode` in `ErrorCodeAwareException`.
+
 ## v2.1.8
 
 1. Deleting Paytm related code & moved to https://github.com/wizpanda/kernel-paytm
