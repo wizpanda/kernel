@@ -14,7 +14,8 @@ import javax.servlet.http.HttpSession
 /**
  * Created by shashank on 06/03/17.
  *
- * @since 1.0.5* @author Shashank Agrawal
+ * @since 1.0.5
+ * @author Shashank Agrawal
  */
 @CompileStatic
 class RequestUtils {

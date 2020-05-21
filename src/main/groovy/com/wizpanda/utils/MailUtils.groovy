@@ -1,27 +1,35 @@
 package com.wizpanda.utils
 
 import grails.gsp.PageRenderer
-import grails.transaction.Transactional
 import grails.util.Environment
 import grails.util.Holders
+import groovy.transform.CompileStatic
+import groovy.transform.TypeCheckingMode
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
-import org.grails.datastore.gorm.GormEnhancer
-import org.grails.datastore.gorm.GormEntity
-
-import javax.servlet.http.HttpServletRequest
 
 /**
+ * A wrapper around grails-async-mail plugin to send the email in simpler way.
  *
  * @author Shashank Agrawal
  * @since 0.0.1
  */
+@CompileStatic
 class MailUtils {
 
     private static Log log = LogFactory.getLog(this)
+    private static PageRenderer groovyPageRenderer
+
+    private MailUtils() {
+    }
 
     static private PageRenderer getGroovyPageRenderer() {
-        return KernelUtils.getBean("groovyPageRenderer")
+        if (groovyPageRenderer) {
+            return groovyPageRenderer
+        }
+
+        groovyPageRenderer = KernelUtils.getBean("groovyPageRenderer") as PageRenderer
+        return groovyPageRenderer
     }
 
     // def should be AsynchronousMailService
@@ -29,15 +37,12 @@ class MailUtils {
         return KernelUtils.getBean("asynchronousMailService")
     }
 
-    static String getDevelopersEmail() {
-        Holders.getFlatConfig()["app.developers.email"]
-    }
-
     // def should be AsynchronousMailMessage
     static def sendMail(String email, String subject, Map<String, Object> template, Map args) {
         return sendMail([email], subject, template, args)
     }
 
+    @CompileStatic(TypeCheckingMode.SKIP)
     static def sendMail(List<String> emails, String emailSubject, Map templateData, Map args) {
         // Use any of the available domain class to create a new transaction
         Holders.getGrailsApplication().getDomainClasses()[0].clazz.withNewTransaction {
@@ -45,18 +50,12 @@ class MailUtils {
         }
     }
 
-    static String prependEnvironmentInSubject(String subject) {
+    private static String prependEnvironmentInSubject(String subject) {
         if (Environment.current == Environment.PRODUCTION) {
             return subject
         }
 
         "[${Environment.current.name}] $subject"
-    }
-
-    static String prependAppNameInSubject(String subject) {
-        String appName = KernelUtils.getAppName()
-
-        "[$appName] $subject"
     }
 
     /**
@@ -75,30 +74,19 @@ class MailUtils {
      * @return Instance of AsynchronousMailMessage domain recently created
      */
     // def should be AsynchronousMailMessage
+    @CompileStatic(TypeCheckingMode.SKIP)
     static def _sendMail(List<String> emails, String emailSubject, Map templateData, Map args) {
         log.debug "Sending email to $emails subject [$emailSubject] args $args"
 
         args = args ?: [:]
-        String htmlContent = args.html, eventCode
+        String htmlContent = args.html
         String appName = KernelUtils.getAppName()
 
         emailSubject = prependEnvironmentInSubject(emailSubject)
 
-        if (args.developerEmail) {
-            eventCode = RandomUtils.randomUniqueCode(10)
-            log.debug "Email event code: $eventCode"
-
-            emailSubject = prependAppNameInSubject(emailSubject)
-        }
-
         if (templateData) {
-            templateData.model = templateData.model ?: [:]
+            templateData.model = templateData.model ?: new HashMap<String, Object>()
             templateData.model.appName = appName
-
-            if (args.developerEmail) {
-                templateData.model.eventCode = eventCode
-                setRequestRelatedModel(templateData.model.request ?: RequestUtils.currentRequest, templateData.model)
-            }
 
             htmlContent = getGroovyPageRenderer().render(templateData)
         }
@@ -148,105 +136,5 @@ class MailUtils {
 
         log.debug "Email scheduled $messageInstance"
         return messageInstance
-    }
-
-    static void sendDevelopersEmail(String subject, Map<String, Object> model, Map args = null) {
-        args = args ?: [:]
-        args.immediate = true
-        args.developerEmail = true
-
-        Map templateData = [
-                template: "/email-templates/developers",
-                model: model,
-                plugin: "kernel"
-        ]
-
-        sendMail(developersEmail, subject, templateData, args)
-    }
-
-    static void sendValidationFailedEmail(GormEntity gormInstance, Map templateModel) {
-        sendValidationFailedEmail([gormInstance], templateModel)
-    }
-
-    /**
-     *
-     * @param gormInstances
-     * @param model
-     * @since 1.0.5
-     */
-    static void sendValidationFailedEmail(List<GormEntity> gormInstances, Map model) {
-        log.debug "Sending exception email"
-
-        model = model ?: [:]
-        model.gormInstances = gormInstances
-        
-        Map templateModel = [
-                template: "/email-templates/validation-failed",
-                model: model,
-                plugin: "kernel"
-        ]
-
-        sendMail(developersEmail, "Domain validation failed", templateModel, [immediate: true, developerEmail: true])
-    }
-
-    static private void setRequestRelatedModel(HttpServletRequest request, Map model) {
-        if (!model || !request) {
-            return
-        }
-
-        String requestURL = request.forwardURI
-        if (request.queryString) {
-            requestURL += "?" + request.queryString
-        }
-
-        model.requestURL = requestURL
-        model.currentRequest = request
-        model.headers = RequestUtils.getHeaders(request)
-        model.frontendURL = request.getHeader("angular-url") ?: request.getHeader("frontend-url")
-    }
-
-    /**
-     * Method used to send email on exception to developers with detailed stacktrace.
-     *
-     * @param exceptions A list of exceptions
-     * @param model OPTIONAL A map containing all parameters to send email.
-     * @param model.requestURL OPTIONAL Grails server URL where exception occurred
-     * @param model.angularURL OPTIONAL Client side Angular app URL
-     * @param model.codeExecutionAt OPTIONAL Any human readable extra information where exception occurred
-     *
-     * @since 1.0.5
-     */
-    static private void _sendExceptionEmail(List<Throwable> exceptions, Map model) {
-        log.debug "Sending exception email"
-
-        model = model ?: [:]
-        model.exceptions = exceptions
-
-        Map templateModel = [
-                template: "/email-templates/exception",
-                model: model,
-                plugin: "kernel"
-        ]
-
-        String developersEmail = Holders.getFlatConfig()["app.developers.email"]
-        sendMail(developersEmail, "Internal Server Error", templateModel, [immediate: true, developerEmail: true])
-    }
-
-    static void sendExceptionEmail(List<Throwable> exceptions, Map model) {
-        try {
-            _sendExceptionEmail(exceptions, model)
-        } catch (Exception e) {
-            // Do not repeatedly call this method to avoid StackOverflow.
-            log.error "Couldn't send email.", e
-        }
-    }
-
-    static void sendExceptionEmail(Throwable exception, Map model) {
-        try {
-            _sendExceptionEmail([exception], model)
-        } catch (Exception e) {
-            // Do not repeatedly call this method to avoid StackOverflow.
-            log.error "Couldn't send email.", e
-        }
     }
 }
