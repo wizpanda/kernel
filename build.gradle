@@ -10,7 +10,7 @@ buildscript {
     }
 }
 
-version "2.2.0"
+version "2.2.1"
 group "com.wizpanda.plugins"
 
 apply plugin: "idea"
@@ -63,57 +63,4 @@ bootRun {
 // Enable if you wish to package this plugin as a standalone application
 bootRepackage.enabled = false
 
-// region Release configuration
-
-jar {
-    exclude "com/wizpanda/UrlMappings**"
-}
-
-publishing {
-    publications {
-        wpJFrogMaven(MavenPublication) {
-            groupId = project.group
-            artifactId = project.name
-            version = project.version
-
-            from components.java
-            artifact sourcesJar
-            artifact javadocJar
-
-            pom {
-                name = 'Kernel'
-                description = 'A Grails plugin to provide some core functionality and utility classes'
-                url = 'https://github.com/wizpanda/kernel'
-                developers {
-                    developer {
-                        id = 'sagrawal31'
-                        name = 'Shashank Agrawal'
-                        email = 'creative@wizpanda.com'
-                    }
-                }
-                scm {
-                    connection = 'scm:git:git://github.com/wizpanda/kernel.git'
-                    developerConnection = 'scm:git:ssh://github.com:wizpanda/kernel.git'
-                    url = 'https://github.com/wizpanda/kernel/tree/main'
-                }
-            }
-        }
-    }
-}
-
-artifactory {
-    contextUrl = "https://wizpanda.jfrog.io/artifactory"
-    publish {
-        repository {
-            repoKey = "default-maven-local"
-            username = "${wpArtifactoryUsername}"
-            password = "${wpArtifactoryPassword}"
-        }
-        defaults {
-            publications('wpJFrogMaven')
-            publishArtifacts = true
-        }
-    }
-}
-
-// endregion
+apply from: "https://raw.githubusercontent.com/wizpanda/gradle-common/main/grails-plugin-jfrog-publish.gradle"
