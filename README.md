@@ -1,6 +1,6 @@
 # Kernel
 
-[ ![Download](https://api.bintray.com/packages/wizpanda/grails-plugins/kernel/images/download.svg) ](https://bintray.com/wizpanda/grails-plugins/kernel/_latestVersion)
+[![GitHub version](https://badge.fury.io/gh/wizpanda%2Fkernel.svg)](https://badge.fury.io/gh/wizpanda%2Fkernel)
 
 A simple Grails plugin which provide some core functionality and utility classes for a Grails application.
 
@@ -47,20 +47,20 @@ See [Releases](https://github.com/wizpanda/kernel/releases) for the changes.
 
 ## Installation
 
-### Grails 3
+### Grails 3+
 
 Add the following to `build.gradle` file of your Grails 3 application
 
 **Under `repositories` section**
 
 ```groovy
-maven { url "http://dl.bintray.com/wizpanda/grails-plugins" }
+maven { url "https://wizpanda.jfrog.io/artifactory/default-maven-local" }
 ```
 
 **Under `dependencies` section**
 
 ```groovy
-compile "com.wizpanda.plugins:kernel:2.1.6"
+compile "com.wizpanda.plugins:kernel:x.x.x"
 ```
 
 ## Installing locally for development
@@ -78,8 +78,7 @@ Then comment the line `compile "com.wizpanda.plugins:kernel:` from your `build.g
 
 https://medium.com/wizpanda/another-way-of-adding-local-grails-plugin-to-a-grails-app-using-the-gradle-build-tool-d60ddaf326cb
 
-## Releasing new version
+## Releasing new version on JFrog
 
 1. Change the version in the `build.gradle`.
-2. Make sure Bintray configuration are configured properly as given [here](https://github.com/grails/grails-core/blob/639d7039d24031dbc1353f95b6d2c88a100da850/grails-gradle-plugin/src/main/groovy/org/grails/gradle/plugin/publishing/GrailsCentralPublishGradlePlugin.groovy).
-2. Run `gradle bintrayUpload`
+2. Run `gradle artifactoryPublish`

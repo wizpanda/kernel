@@ -1,5 +1,24 @@
 # Changelog
 
+## v2.2.1
+
+This release does not bring any code changes. It only changes the artifactory/maven location of publishing.
+We have now moved from Bintray to JFrog because Bintray has been shutdown. Read more https://jfrog.
+com/blog/into-the-sunset-bintray-jcenter-gocenter-and-chartcenter/.
+
+### Required Changes
+
+**In your `build.gradle`**-
+
+```diff
+allprojects {
+    repositories {
+-       maven { url "https://dl.bintray.com/wizpanda/grails-plugins" }
++       maven { url "https://wizpanda.jfrog.io/artifactory/default-maven-local" }
+    }
+}
+```
+
 ## v2.2.0
 
 1. Deleted the unused `MailUtils` methods for developers as we switched to Sentry.
