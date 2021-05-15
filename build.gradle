@@ -64,3 +64,4 @@ bootRun {
 bootRepackage.enabled = false
 
 apply from: "https://raw.githubusercontent.com/wizpanda/gradle-common/main/grails-plugin-jfrog-publish.gradle"
+apply from: "https://raw.githubusercontent.com/wizpanda/gradle-common/main/bump-version.gradle"
