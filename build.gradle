@@ -6,6 +6,7 @@ buildscript {
     dependencies {
         classpath "org.grails:grails-gradle-plugin:$grailsVersion"
         classpath "org.grails.plugins:views-gradle:1.2.7"
+        classpath(group: 'org.jfrog.buildinfo', name: 'build-info-extractor-gradle', version: '4.+')
     }
 }
 
@@ -14,7 +15,8 @@ group "com.wizpanda.plugins"
 
 apply plugin: "idea"
 apply plugin: "org.grails.grails-plugin"
-apply plugin: "org.grails.grails-plugin-publish"
+apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.artifactory'
 apply plugin: "org.grails.grails-gsp"
 apply plugin: "org.grails.plugins.views-json"
 
@@ -61,18 +63,57 @@ bootRun {
 // Enable if you wish to package this plugin as a standalone application
 bootRepackage.enabled = false
 
-grailsPublish {
-    githubSlug = "wizpanda/kernel"
-    userOrg = "wizpanda"
-    repo = "grails-plugins"
-    license {
-        name = "Apache-2.0"
-    }
-    title = "Kernel"
-    desc = "A Grails plugin to provide some core functionality and utility classes"
-    developers = [sagrawal31: "Shashank Agrawal"]
-}
+// region Release configuration
 
 jar {
     exclude "com/wizpanda/UrlMappings**"
 }
+
+publishing {
+    publications {
+        wpJFrogMaven(MavenPublication) {
+            groupId = project.group
+            artifactId = project.name
+            version = project.version
+
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+
+            pom {
+                name = 'Kernel'
+                description = 'A Grails plugin to provide some core functionality and utility classes'
+                url = 'https://github.com/wizpanda/kernel'
+                developers {
+                    developer {
+                        id = 'sagrawal31'
+                        name = 'Shashank Agrawal'
+                        email = 'creative@wizpanda.com'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:git://github.com/wizpanda/kernel.git'
+                    developerConnection = 'scm:git:ssh://github.com:wizpanda/kernel.git'
+                    url = 'https://github.com/wizpanda/kernel/tree/main'
+                }
+            }
+        }
+    }
+}
+
+artifactory {
+    contextUrl = "https://wizpanda.jfrog.io/artifactory"
+    publish {
+        repository {
+            repoKey = "default-maven-local"
+            username = "${wpArtifactoryUsername}"
+            password = "${wpArtifactoryPassword}"
+        }
+        defaults {
+            publications('wpJFrogMaven')
+            publishArtifacts = true
+        }
+    }
+}
+
+// endregion
