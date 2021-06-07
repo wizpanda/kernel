@@ -6,7 +6,6 @@ buildscript {
     dependencies {
         classpath "org.grails:grails-gradle-plugin:$grailsVersion"
         classpath "org.grails.plugins:views-gradle:1.2.7"
-        classpath(group: 'org.jfrog.buildinfo', name: 'build-info-extractor-gradle', version: '4.+')
     }
 }
 
@@ -16,7 +15,6 @@ group "com.wizpanda.plugins"
 apply plugin: "idea"
 apply plugin: "org.grails.grails-plugin"
 apply plugin: 'maven-publish'
-apply plugin: 'com.jfrog.artifactory'
 apply plugin: "org.grails.grails-gsp"
 apply plugin: "org.grails.plugins.views-json"
 
