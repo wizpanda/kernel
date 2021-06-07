@@ -1,18 +1,16 @@
 package com.wizpanda.logging
 
-import com.wizpanda.utils.KernelUtils
 import com.wizpanda.utils.KernelRequestUtils
+import com.wizpanda.utils.KernelUtils
 import grails.util.Environment
 import grails.util.Metadata
 import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
 import io.sentry.Sentry
-import io.sentry.SentryClient
-import io.sentry.event.Event
-import io.sentry.event.EventBuilder
-import io.sentry.event.interfaces.ExceptionInterface
-import io.sentry.event.interfaces.HttpInterface
-import io.sentry.event.interfaces.UserInterface
+import io.sentry.SentryEvent
+import io.sentry.SentryLevel
+import io.sentry.protocol.Message
+import io.sentry.protocol.User
 import org.grails.datastore.gorm.GormEntity
 
 import javax.servlet.http.HttpServletRequest
@@ -26,8 +24,6 @@ import javax.servlet.http.HttpServletRequest
 @CompileStatic
 class SentryLogger {
 
-    private static SentryClient sentryClient
-    private static Closure userInterfaceGenerator
     private static boolean useInLocalEnvironment = false
 
     static boolean shouldNotUseSentry() {
@@ -48,38 +44,38 @@ class SentryLogger {
         }
 
         println "Sentry init for $serverName"
-
-        sentryClient = Sentry.init(dsn)
-        sentryClient.setEnvironment(Environment.current.name)
-        sentryClient.setServerName(serverName)
-
         Metadata metadata = Metadata.current
-        sentryClient.setRelease(metadata.getApplicationVersion())
-        sentryClient.addTag("app_name", metadata.getApplicationName())
+
+        Sentry.init({ options ->
+            options.setDsn(dsn)
+            options.setEnvironment(Environment.current.name)
+            options.setServerName(serverName)
+            options.setRelease(metadata.getApplicationName() + "@" + metadata.getApplicationVersion())
+            options.setTag("app_name", metadata.getApplicationName())
+        })
     }
 
-    static void setupUserInterfaceGenerator(Closure closure) {
-        userInterfaceGenerator = closure
-    }
-
-    static void capture(String message, Map<String, Object> extras = [:], Event.Level level = Event.Level.ERROR) {
+    static void capture(String message, Map<String, Object> extras = [:], SentryLevel level = SentryLevel.ERROR) {
         logInConsole(message, null, extras)
 
         if (shouldNotUseSentry()) {
             return
         }
 
-        EventBuilder eventBuilder = new EventBuilder()
-                .withMessage(message)
-                .withLevel(level)
+        Message sentryMessage = new Message()
+        sentryMessage.setFormatted(message)
+
+        SentryEvent event = new SentryEvent()
+        event.setMessage(sentryMessage)
+        event.setLevel(level)
 
         extras?.each { String key, def value ->
-            eventBuilder.withExtra(key, value)
+            event.setExtra(key, value)
         }
 
-        appendRequestToLog(eventBuilder)
+        appendRequestToEvent(event)
 
-        Sentry.capture(eventBuilder)
+        Sentry.captureEvent(event)
     }
 
     static void capture(Throwable throwable, Map<String, Object> extras = [:]) {
@@ -122,43 +118,33 @@ class SentryLogger {
             return
         }
 
-        EventBuilder eventBuilder = new EventBuilder()
-                .withMessage(message)
-                .withLevel(Event.Level.ERROR)
-                .withSentryInterface(new ExceptionInterface(throwable))
+        Message sentryMessage = new Message()
+        sentryMessage.setFormatted(message)
+
+        SentryEvent event = new SentryEvent(throwable)
+        event.setMessage(sentryMessage)
+        event.setLevel(SentryLevel.ERROR)
 
         extras?.each { String key, def value ->
-            eventBuilder.withExtra(key, value)
+            event.setExtra(key, value)
         }
 
-        appendRequestToLog(eventBuilder)
+        appendRequestToEvent(event)
 
-        Sentry.capture(eventBuilder)
+        Sentry.captureEvent(event)
     }
 
     /**
      * Log the current request, if any to the given eventBuilder
      */
-    private static void appendRequestToLog(EventBuilder eventBuilder) {
+    private static void appendRequestToEvent(SentryEvent event) {
         HttpServletRequest request = KernelRequestUtils.getCurrentRequest()
         if (!request) {
             return
         }
 
-        UserInterface userInterface = createUserInterface(request)
-        eventBuilder.withSentryInterface(userInterface, true)
-
-        HttpInterface httpInterface = new HttpInterface(request, KernelRemoteAddressResolver.instance)
-        eventBuilder.withSentryInterface(httpInterface, true)
-    }
-
-    private static UserInterface createUserInterface(HttpServletRequest request) {
-        if (userInterfaceGenerator) {
-            return userInterfaceGenerator.call(request) as UserInterface
-        }
-
-        String ipAddress = KernelRequestUtils.getIPAddress(request)
-
-        new UserInterface("", "", ipAddress, "", null)
+        User user = new User()
+        user.setIpAddress(KernelRequestUtils.getIPAddress(request))
+        event.setUser(user)
     }
 }

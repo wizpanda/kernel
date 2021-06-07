@@ -21,6 +21,7 @@ apply plugin: "org.grails.plugins.views-json"
 repositories {
     mavenLocal()
     maven { url "https://repo.grails.org/grails/core" }
+    mavenCentral()
 }
 
 dependencyManagement {
@@ -38,7 +39,7 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-tomcat"
     compile "org.grails:grails-dependencies"
     compile "org.grails:grails-web-boot"
-    compile "io.sentry:sentry:1.7.30"
+    implementation "io.sentry:sentry:5.0.0"
     compile "org.hashids:hashids:1.0.1"
     compile "org.codehaus.groovy.modules.http-builder:http-builder:0.7.1"
     provided "org.grails.plugins:views-json:1.2.7"

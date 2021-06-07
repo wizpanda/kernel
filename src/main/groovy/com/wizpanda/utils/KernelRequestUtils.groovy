@@ -86,8 +86,8 @@ class KernelRequestUtils {
      * @param request
      * @return
      */
-    static getIPAddress(HttpServletRequest request = getCurrentRequest()) {
-        KernelRemoteAddressResolver.instance.getRemoteAddress(request)
+    static String getIPAddress(HttpServletRequest request = getCurrentRequest()) {
+        KernelRemoteAddressResolver.getRemoteAddress(request)
     }
 
     /**

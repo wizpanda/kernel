@@ -1,19 +1,15 @@
 package com.wizpanda.logging
 
 import groovy.transform.CompileStatic
-import io.sentry.event.helper.RemoteAddressResolver
 
 import javax.servlet.http.HttpServletRequest
 
 @CompileStatic
-class KernelRemoteAddressResolver implements RemoteAddressResolver {
+class KernelRemoteAddressResolver {
 
     private static final List<String> IP_HEADERS = ["X-Real-IP", "Client-IP", "X-Forwarded-For", "Proxy-Client-IP", "rlnclientipaddr"]
 
-    static final KernelRemoteAddressResolver instance = new KernelRemoteAddressResolver()
-
     private KernelRemoteAddressResolver() {
-
     }
 
     /**
@@ -22,7 +18,7 @@ class KernelRemoteAddressResolver implements RemoteAddressResolver {
      * @param request HttpServletRequest
      * @return the IP address of the client or last proxy that sent the request.
      */
-    String getRemoteAddress(HttpServletRequest request) {
+    static String getRemoteAddress(HttpServletRequest request) {
         String unknown = "127.0.0.1"
         if (!request) {
             return unknown
