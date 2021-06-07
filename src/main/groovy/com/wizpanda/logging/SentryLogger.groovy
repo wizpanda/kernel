@@ -1,7 +1,7 @@
 package com.wizpanda.logging
 
 import com.wizpanda.utils.KernelUtils
-import com.wizpanda.utils.RequestUtils
+import com.wizpanda.utils.KernelRequestUtils
 import grails.util.Environment
 import grails.util.Metadata
 import groovy.transform.CompileStatic
@@ -140,7 +140,7 @@ class SentryLogger {
      * Log the current request, if any to the given eventBuilder
      */
     private static void appendRequestToLog(EventBuilder eventBuilder) {
-        HttpServletRequest request = RequestUtils.getCurrentRequest()
+        HttpServletRequest request = KernelRequestUtils.getCurrentRequest()
         if (!request) {
             return
         }
@@ -157,7 +157,7 @@ class SentryLogger {
             return userInterfaceGenerator.call(request) as UserInterface
         }
 
-        String ipAddress = RequestUtils.getIPAddress(request)
+        String ipAddress = KernelRequestUtils.getIPAddress(request)
 
         new UserInterface("", "", ipAddress, "", null)
     }

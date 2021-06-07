@@ -12,15 +12,15 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpSession
 
 /**
- * Created by shashank on 06/03/17.
+ * A utility class around {@link HttpServletRequest}.
  *
  * @since 1.0.5
  * @author Shashank Agrawal
  */
 @CompileStatic
-class RequestUtils {
+class KernelRequestUtils {
 
-    private RequestUtils() {
+    private KernelRequestUtils() {
         // Hide default constructor as this is a utility class
     }
 
