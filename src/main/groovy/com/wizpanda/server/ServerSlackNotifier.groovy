@@ -91,10 +91,6 @@ class ServerSlackNotifier {
     }
 
     private static void sendSlackMessage(String message, String color) {
-        if (Environment.isDevelopmentMode()) {
-            return
-        }
-
         Map config = Holders.getFlatConfig().get("grails.plugin.kernel.server.slack.notify") as Map
         if (!config || !config.enabled) {
             return
