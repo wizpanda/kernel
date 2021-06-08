@@ -1,5 +1,11 @@
 # Changelog
 
+## v3.0.0
+
+1. Rename `RequestUtils.groovy` to `KernelRequestUtils.groovy` to avoid conflict in app.
+2. ServerSlackNotifier should not check for dev environment.
+3. Upgrade sentry-java to 5.0.0
+
 ## v2.2.1
 
 This release does not bring any code changes. It only changes the artifactory/maven location of publishing.
