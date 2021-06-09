@@ -16,6 +16,10 @@ class KernelGrailsPlugin extends Plugin {
             '**/com/wizpanda/UrlMappings*/**'
     ]
 
+    def loadAfter = [
+            'controllers'       // To make sure the "exceptionHandler" is overwritten
+    ]
+
     String title = "Kernel Grails Plugin" // Headline display name of the plugin
     String author = "Shashank Agrawal"
     String authorEmail = ""
