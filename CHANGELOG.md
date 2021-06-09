@@ -1,5 +1,10 @@
 # Changelog
 
+## v3.0.1
+
+1. Globally handle unhandled exceptions via Sentry.
+2. Add request details interceptor for adding request details in Sentry events.
+
 ## v3.0.0
 
 1. Rename `RequestUtils.groovy` to `KernelRequestUtils.groovy` to avoid conflict in app.
