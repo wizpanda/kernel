@@ -1,5 +1,9 @@
 # Changelog
 
+## v3.0.2
+
+1. Make sure the plugin is loaded after the `grails-controller` plugin for Sentry exception handler to work.
+
 ## v3.0.1
 
 1. Globally handle unhandled exceptions via Sentry.
