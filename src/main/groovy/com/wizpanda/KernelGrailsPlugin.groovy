@@ -3,6 +3,7 @@ package com.wizpanda
 import com.wizpanda.converts.FormattedStringValueConverter
 import com.wizpanda.exception.KernelExceptionResolver
 import grails.plugins.Plugin
+import io.sentry.servlet.SentryServletRequestListener
 
 class KernelGrailsPlugin extends Plugin {
 
@@ -41,6 +42,8 @@ class KernelGrailsPlugin extends Plugin {
                 // TODO this is responding detailed error in API call. Fix this
                 exceptionMappings = ["java.lang.Exception": "/error"]
             }
+
+            sentryServletRequestListener(SentryServletRequestListener)
         }
     }
 }
