@@ -1,6 +1,7 @@
 # Kernel
 
-[![GitHub version](https://badge.fury.io/gh/wizpanda%2Fkernel.svg)](https://badge.fury.io/gh/wizpanda%2Fkernel)
+[![GitHub version](https://badge.fury.io/gh/wizpanda%2Fkernel.svg)](https://badge.fury.io/gh/wizpanda%2Fkernel) [!
+[Release](https://jitpack.io/v/com.wizpanda/kernel.svg)](https://jitpack.io/#com.wizpanda/kernel)
 
 A simple Grails plugin which provide some core functionality and utility classes for a Grails application.
 
@@ -54,13 +55,13 @@ Add the following to `build.gradle` file of your Grails 3 application
 **Under `repositories` section**
 
 ```groovy
-maven { url "https://wizpanda.jfrog.io/artifactory/default-maven-local" }
+maven { url 'https://jitpack.io' }
 ```
 
 **Under `dependencies` section**
 
 ```groovy
-compile "com.wizpanda.plugins:kernel:x.x.x"
+compile "com.wizpanda:kernel:x.x.x"
 ```
 
 ## Installing locally for development
@@ -78,7 +79,7 @@ Then comment the line `compile "com.wizpanda.plugins:kernel:` from your `build.g
 
 https://medium.com/wizpanda/another-way-of-adding-local-grails-plugin-to-a-grails-app-using-the-gradle-build-tool-d60ddaf326cb
 
-## Releasing new version on JFrog
+## Release
 
 1. Change the version in the `build.gradle`.
-2. Run `gradle artifactoryPublish`
+2. Commit, tag & push.
