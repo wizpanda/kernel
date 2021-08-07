@@ -1,7 +1,7 @@
 # Kernel
 
-[![GitHub version](https://badge.fury.io/gh/wizpanda%2Fkernel.svg)](https://badge.fury.io/gh/wizpanda%2Fkernel) [!
-[Release](https://jitpack.io/v/com.wizpanda/kernel.svg)](https://jitpack.io/#com.wizpanda/kernel)
+[![GitHub version](https://badge.fury.io/gh/wizpanda%2Fkernel.svg)](https://badge.fury.io/gh/wizpanda%2Fkernel) 
+[![Release](https://jitpack.io/v/com.wizpanda/kernel.svg)](https://jitpack.io/#com.wizpanda/kernel)
 
 A simple Grails plugin which provide some core functionality and utility classes for a Grails application.
 
